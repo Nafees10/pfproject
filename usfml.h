@@ -99,6 +99,7 @@ struct MouseEvent{
 
 /// Event type
 enum EventType{
+	Unknown,
 	WindowCloseButtonPress,
 	Keyboard,
 	Mouse,
@@ -119,7 +120,7 @@ struct Event{
 /// Gets event.
 ///
 /// Returns: true if a event was returned, false if no
-bool eventGet(Event *event);
+bool eventGet(Event &event);
 
 
 #endif
