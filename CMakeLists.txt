@@ -14,6 +14,9 @@ FetchContent_MakeAvailable(SFML)
 
 add_executable(pfproject main.cpp usfml.cpp)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED true)
+
 target_link_libraries(
 	pfproject
 	sfml-graphics
