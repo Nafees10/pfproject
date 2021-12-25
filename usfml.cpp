@@ -101,6 +101,7 @@ bool eventGet(Event *event){
 		event->mouse.pressed = _sfEvent->type == sf::Event::MouseButtonPressed;
 	}else if (_sfEvent->type == sf::Event::MouseLeft || _sfEvent->type == sf::Event::MouseMoved){
 		event->type = EventType::Mouse;
+		event->mouse.pressed = false;
 		if (_sfEvent->type == sf::Event::MouseMoved){
 			event->mouse.x = _sfEvent->mouseButton.x;
 			event->mouse.y = _sfEvent->mouseButton.y;
@@ -124,62 +125,42 @@ bool eventGet(Event *event){
 		event->type = EventType::Keyboard;
 		event->keyboard.pressed = _sfEvent->type == sf::Event::KeyPressed;
 		if (_sfEvent->key.code == sf::Keyboard::Escape)
-			event->keyboard.spKey = SpecialKeys::Escape;
+			event->keyboard.key = SpecialKey::Escape;
 		else if (_sfEvent->key.code == sf::Keyboard::LControl ||
 				_sfEvent->key.code == sf::Keyboard::RControl)
-			event->keyboard.spKey = SpecialKeys::Ctrl;
+			event->keyboard.key = SpecialKey::Ctrl;
 		else if (_sfEvent->key.code == sf::Keyboard::LShift ||
 				_sfEvent->key.code == sf::Keyboard::RShift)
-			event->keyboard.spKey = SpecialKeys::Shift;
+			event->keyboard.key = SpecialKey::Shift;
 		else if (_sfEvent->key.code == sf::Keyboard::LAlt ||
 				_sfEvent->key.code == sf::Keyboard::RAlt)
-			event->keyboard.spKey = SpecialKeys::Alt;
+			event->keyboard.key = SpecialKey::Alt;
 		else if (_sfEvent->key.code == sf::Keyboard::Backspace)
-			event->keyboard.spKey = SpecialKeys::Backspace;
+			event->keyboard.key = SpecialKey::Backspace;
 		else if (_sfEvent->key.code == sf::Keyboard::Tab)
-			event->keyboard.spKey = SpecialKeys::Tab;
+			event->keyboard.key = SpecialKey::Tab;
 		else if (_sfEvent->key.code == sf::Keyboard::PageUp)
-			event->keyboard.spKey = SpecialKeys::PgUp;
+			event->keyboard.key = SpecialKey::PgUp;
 		else if (_sfEvent->key.code == sf::Keyboard::PageDown)
-			event->keyboard.spKey = SpecialKeys::PdDn;
+			event->keyboard.key = SpecialKey::PdDn;
 		else if (_sfEvent->key.code == sf::Keyboard::Home)
-			event->keyboard.spKey = SpecialKeys::Home;
+			event->keyboard.key = SpecialKey::Home;
 		else if (_sfEvent->key.code == sf::Keyboard::End)
-			event->keyboard.spKey = SpecialKeys::End;
+			event->keyboard.key = SpecialKey::End;
 		else if (_sfEvent->key.code == sf::Keyboard::Left)
-			event->keyboard.spKey = SpecialKeys::ArrowLeft;
+			event->keyboard.key = SpecialKey::ArrowLeft;
 		else if (_sfEvent->key.code == sf::Keyboard::Right)
-			event->keyboard.spKey = SpecialKeys::ArrowRight;
+			event->keyboard.key = SpecialKey::ArrowRight;
 		else if (_sfEvent->key.code == sf::Keyboard::Up)
-			event->keyboard.spKey = SpecialKeys::ArrowUp;
+			event->keyboard.key = SpecialKey::ArrowUp;
 		else if (_sfEvent->key.code == sf::Keyboard::Down)
-			event->keyboard.spKey = SpecialKeys::ArrowDown;
+			event->keyboard.key = SpecialKey::ArrowDown;
 		else if (_sfEvent->key.code == sf::Keyboard::Enter)
-			event->keyboard.spKey = SpecialKeys::Enter;
-		else if (_sfEvent->key.code == sf::Keyboard::F1)
-			event->keyboard.spKey = SpecialKeys::F1;
-		else if (_sfEvent->key.code == sf::Keyboard::F2)
-			event->keyboard.spKey = SpecialKeys::F2;
-		else if (_sfEvent->key.code == sf::Keyboard::F3)
-			event->keyboard.spKey = SpecialKeys::F3;
-		else if (_sfEvent->key.code == sf::Keyboard::F4)
-			event->keyboard.spKey = SpecialKeys::F4;
-		else if (_sfEvent->key.code == sf::Keyboard::F5)
-			event->keyboard.spKey = SpecialKeys::F5;
-		else if (_sfEvent->key.code == sf::Keyboard::F6)
-			event->keyboard.spKey = SpecialKeys::F6;
-		else if (_sfEvent->key.code == sf::Keyboard::F7)
-			event->keyboard.spKey = SpecialKeys::F7;
-		else if (_sfEvent->key.code == sf::Keyboard::F8)
-			event->keyboard.spKey = SpecialKeys::F8;
-		else if (_sfEvent->key.code == sf::Keyboard::F9)
-			event->keyboard.spKey = SpecialKeys::F9;
-		else if (_sfEvent->key.code == sf::Keyboard::F10)
-			event->keyboard.spKey = SpecialKeys::F10;
-		else if (_sfEvent->key.code == sf::Keyboard::F11)
-			event->keyboard.spKey = SpecialKeys::F11;
-		else if (_sfEvent->key.code == sf::Keyboard::F12)
-			event->keyboard.spKey = SpecialKeys::F12;
+			event->keyboard.key = SpecialKey::Enter;
+		else if (_sfEvent->key.code >= sf::Keyboard::F1 &&
+			_sfEvent->key.code <= sf::Keyboard::F12){
+			event->keyboard.key = SpecialKey::F1 + (_sfEvent->key.code - sf::Keyboard::F1);
+		}
 	}
 	_eventWaiting = false;
 	return true;

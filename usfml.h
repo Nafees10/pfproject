@@ -33,7 +33,7 @@ bool eventOccurred();
 void eventWait();
 
 /// Special keyboard keys
-enum SpecialKeys : int{
+enum SpecialKey : char{
 	Escape,
 	Ctrl,
 	Shift,
@@ -66,14 +66,10 @@ enum SpecialKeys : int{
 struct KeyboardEvent{
 	/// if it was pressed (true), or released (false)
 	bool pressed;
-	/// if it was a character or a special key
+	/// if it is special key (`SpecialKey`)
 	bool isSpecial;
-	union{
-		/// character key
-		char key;
-		/// special key
-		SpecialKeys spKey;
-	};
+	/// key
+	char key;
 };
 
 /// Mouse buttons
@@ -85,9 +81,9 @@ enum MouseButton : char{
 	/// Middle button
 	Middle = 'M',
 	/// Scroll up
-	ScrollUp,
+	ScrollUp = 'U',
 	/// Scroll down
-	ScrollDown,
+	ScrollDown = 'D',
 	/// no button, just hover
 	None = '\0',
 };
@@ -119,6 +115,11 @@ struct Event{
 		KeyboardEvent keyboard;
 	};
 };
+
+/// Gets event.
+///
+/// Returns: true if a event was returned, false if no
+bool eventGet(Event *event);
 
 
 #endif
