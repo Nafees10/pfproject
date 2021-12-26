@@ -1,8 +1,11 @@
 #include <iostream>
+#include <stdlib.h>
+#include <time.h>
 #include "usfml.h"
 #include "base.h"
 
 int main(){
+	srand(time(NULL));
 	usfmlInit(800, 600, (char*)"Potato Game");
 	while (windowIsOpen()){
 		Event event;
