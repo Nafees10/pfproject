@@ -103,3 +103,22 @@ bool candyCheck(int candy, int color, int type){
 bool candyCheckType(int candy, int type){
 	return (candy & type) != 0;
 }
+
+bool swapIsPossible(int r1, int c1, int r2, int c2){
+	if (r1 == r2)
+		return abs(c1 - c2) == 1;
+	if (c1 == c2)
+		return abs(r1 - r2) == 1;
+	return false;
+}
+
+bool swap(int r1, int c1, int r2, int c2){
+	if (!swapIsPossible(r1, c1, r2, c2))
+		return false;
+	int tempCandy = _grid[r1][c1];
+	_grid[r1][c1] = _grid[r2][c2];
+	_grid[r2][c2] = tempCandy;
+	// try all move functions
+
+	return true;
+}

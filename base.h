@@ -70,4 +70,12 @@ bool candyCheck(int candy, int color, int type);
 /// Returns: true if matches
 bool candyCheckType(int candy, int type);
 
+/// Returns: true if a swap can happen
+bool swapIsPossible(int r1, int c1, int r2, int c2);
+
+/// Swaps two cells, and tries to match if there is any
+///
+/// Returns: true if swap happened, false if not possible
+bool swwp(int r1, int c1, int r2, int c2);
+
 #endif
