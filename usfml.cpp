@@ -13,20 +13,22 @@ sf::Clock *_clock = nullptr;
 sf::Event *_sfEvent = nullptr;
 /// if an event is waiting in _sfEvent
 bool _eventWaiting = false;
+/// Textures
+sf::Texture *_textures[128] = {nullptr};
 
-bool createWindow(int width, int height, char *title){
+bool usfmlInit(int width, int height, char *title){
 	if (_initialised)
 		return false;
 	_initialised = true;
 	_window = new sf::RenderWindow(sf::VideoMode(width, height), title,
-							 sf::Style::Titlebar | sf::Style::Close); // do not allow resizing
+							 sf::Style::Titlebar | sf::Style::Close);
 	_sfEvent = new sf::Event();
 	_clock = new sf::Clock();
 	_eventWaiting = false;
 	return true;
 }
 
-bool destroyWindow(){
+bool usfmlDestroy(){
 	if (!_initialised)
 		return false;
 	delete _window;
@@ -167,3 +169,28 @@ bool eventGet(Event &event){
 	return true;
 }
 
+void frameClear(unsigned int color = 0x000000){
+	if (!_initialised)
+		return;
+	_window->clear(sf::Color(color));
+}
+
+void framePush(){
+	_window->display();
+}
+
+bool loadTexture(char* path){
+	// look for nullptr
+	int i = 0;
+	while (i < 128 && _textures[i] != nullptr)
+		i ++;
+	if (i >= 128)
+		return false;
+	_textures[i] = new sf::Texture;
+	if (!_textures[i]->loadFromFile(path)){
+		delete _textures[i];
+		_textures[i] = nullptr;
+		return false;
+	}
+	return true;
+}

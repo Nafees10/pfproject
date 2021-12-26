@@ -1,15 +1,15 @@
-#ifndef USFML_H
-#define USFML_H
+#ifndef MICROSFML_H
+#define MICROSFML_H
 
 /// Creates a window of width x height size, with title
 ///
 /// Returns: true if done, false if already created
-bool createWindow(int width, int height, char *title);
+bool usfmlInit(int width, int height, char *title);
 
 /// Destroys the created window
 ///
 /// Returns: true if done, false if window was never created
-bool destroyWindow();
+bool usfmlDestroy();
 
 /// Returns: true if window has focus
 bool windowHasFocus();
@@ -121,6 +121,13 @@ struct Event{
 ///
 /// Returns: true if a event was returned, false if no
 bool eventGet(Event &event);
+
+/// Clears window
+void frameClear();
+
+/// display frame
+void framePush();
+
 
 
 #endif
