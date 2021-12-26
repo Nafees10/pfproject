@@ -14,7 +14,9 @@ sf::Event *_sfEvent = nullptr;
 /// if an event is waiting in _sfEvent
 bool _eventWaiting = false;
 /// Textures
-sf::Texture *_textures[128] = {nullptr};
+sf::Texture *_texture[MAX_OBJECTS] = {nullptr};
+/// Sprites
+sf::Sprite *_sprite[MAX_OBJECTS] = {nullptr};
 
 bool usfmlInit(int width, int height, char *title){
 	if (_initialised)
@@ -179,18 +181,46 @@ void framePush(){
 	_window->display();
 }
 
-bool loadTexture(char* path){
+int objectCreate(char* imagePath){
 	// look for nullptr
-	int i = 0;
-	while (i < 128 && _textures[i] != nullptr)
-		i ++;
-	if (i >= 128)
-		return false;
-	_textures[i] = new sf::Texture;
-	if (!_textures[i]->loadFromFile(path)){
-		delete _textures[i];
-		_textures[i] = nullptr;
-		return false;
+	int index = 0;
+	while (index < MAX_OBJECTS && _texture[index] != nullptr)
+		index ++;
+	if (index >= MAX_OBJECTS)
+		return -1;
+	_texture[index] = new sf::Texture();
+	if (_texture[index]->loadFromFile(imagePath)){
+		_sprite[index] = new sf::Sprite(*(_texture[index]));
+		return index;
 	}
+	delete _texture[index];
+	return -2;
+}
+
+bool objectExists(int index){
+	return index >= 0 && index < MAX_OBJECTS && _sprite[index] != nullptr;
+}
+
+bool objectMove(int index, int x, int y){
+	if (!objectExists(index))
+		return false;
+	_sprite[index]->move(x, y);
+	return true;
+}
+
+bool objectDraw(int index){
+	if (!_initialised || !objectExists(index))
+		return false;
+	_window->draw(*(_sprite[index]));
+	return true;
+}
+
+bool objectDestroy(int index){
+	if (!objectExists(index))
+		return false;
+	delete _sprite[index];
+	delete _texture[index];
+	_sprite[index] = nullptr;
+	_texture[index] = nullptr;
 	return true;
 }

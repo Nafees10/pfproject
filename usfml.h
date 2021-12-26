@@ -1,6 +1,8 @@
 #ifndef MICROSFML_H
 #define MICROSFML_H
 
+#define MAX_OBJECTS 256
+
 /// Creates a window of width x height size, with title
 ///
 /// Returns: true if done, false if already created
@@ -128,6 +130,27 @@ void frameClear();
 /// display frame
 void framePush();
 
+/// Creates an object, from an image
+///
+/// Returns: object ID (0 - 255), or -1 if max objects reached, or -2 if invalid image
+int objectCreate(char* imagePath);
 
+/// Returns: true if an object with object id = index exists
+bool objectExists(int index);
+
+/// Moves an object
+///
+/// Returns: true if done, false if object doesnt exist
+bool objectMove(int index, int x, int y);
+
+/// Draws the object
+///
+/// Returns: true if done, false if not
+bool objectDraw(int index);
+
+/// Deletes an object
+///
+/// Returns: true if destroyed, false if doesnt exist
+bool objectDestroy(int index);
 
 #endif
