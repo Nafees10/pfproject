@@ -303,13 +303,13 @@ void simple(int arr[][c])
     {
         for (int i = 0; i < c - 2; i++) {
             int temp = 6;
-            if (arr[j][i] != 21)
+            if (arr[j][i] < 21)
                 temp = (arr[j][i] % 5);
             if ((arr[j][i + 1] % 5) == temp && (arr[j][i + 2] % 5) == temp && arr[j][i + 1] < 21 && arr[j][i + 2] < 21)
             {
-                arr[j][i] = 0;
-                arr[j][i + 1] = 0;
-                arr[j][i + 2] = 0;
+                special_move(arr, j, i);
+                special_move(arr, j, (i + 1));
+                special_move(arr, j, (i + 2));
             }
         }
         for (int i = 0; i < c; i++)
@@ -317,13 +317,13 @@ void simple(int arr[][c])
             for (int j = 0; j < r - 2; j++)
             {
                 int temp = 6;
-                if (arr[j][i] != 21)
+                if (arr[j][i] < 21)
                     temp = (arr[j][i] % 5);
                 if ((arr[j + 1][i] % 5) == temp && (arr[j + 2][i] % 5) == temp && arr[j + 1][i] < 21 && arr[j + 2][i] < 21)
                 {
-                    arr[j][i] = 0;
-                    arr[j + 1][i] = 0;
-                    arr[j + 2][i] = 0;
+                    special_move(arr, j, i);
+                    special_move(arr, (j + 1), i);
+                    special_move(arr, (j + 2), i);
                 }
             }
         }
