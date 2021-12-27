@@ -39,6 +39,14 @@ void init(int offX, int offY, int cellLength, int border){
 		_candyTexture[i] = -1;
 		_candyIndex[i] = -1;
 	}
+	_mainBkgObject = -1;
+	_playBtnObject = -1;
+	_loadBtnObject = -1;
+	_ingameBkgObject = -1;
+	_mainBkgTexture = -1;
+	_playBtnTexture = -1;
+	_loadBtnTexture = -1;
+	_ingameBkgTexture = -1;
 	for (int x = 0; x < COLS; x ++){
 		for (int y = 0; y < ROWS; y ++){
 			_objects[y][x] = objectCreate(-1);
@@ -46,10 +54,6 @@ void init(int offX, int offY, int cellLength, int border){
 					   offY + y * (border + cellLength));
 		}
 	}
-	_mainBkgObject = -1;
-	_playBtnObject = -1;
-	_loadBtnObject = -1;
-	_ingameBkgObject = -1;
 }
 
 void gridInit(){
@@ -73,19 +77,21 @@ void gridStep(){
 	// replace crushed with 0
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
-			if (candyCheck(_grid[r][c], CandyProperty::Crushed))
+			if (candyCheck(_grid[r][c], CandyProperty::Crushed)){
 				_grid[r][c] = 0;
+				std::cout << "crushing " << c << ", " << r << "\n";
+			}
 		}
 	}
 	for (int c = 0; c < COLS; c ++){
 		int shift = 0, r = ROWS - 1;
-		while (r - shift >= 0){
-			if (_grid[r - shift][c] == 0){
-				shift ++;
-			}else{
-				_grid[r][c] = _grid[r - shift][c];
-				r --;
+		while (r + shift >= 0){
+			if (_grid[r + shift][c] == 0){
+				shift --;
+			}else if (shift > 0){
+				_grid[r][c] = _grid[r + shift][c];
 			}
+			r --;
 		}
 		for (; r >= 0; r --)
 			_grid[r][c] = 0;
@@ -294,12 +300,12 @@ void run(){
 		gridUpdateTextures();
 		drawGrid();
 		gridStep();
+		framePush();
 		if (!eventGet(event))
 			continue;
 		if (event.type == EventType::WindowCloseButtonPress){
 			break;
 		}
-		framePush();
 	}
 	usfmlDestroy();
 }
