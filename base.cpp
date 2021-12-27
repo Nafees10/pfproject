@@ -32,7 +32,7 @@ void gridStep(){
 	// replace crushed with 0
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
-			if (candyCheckType(_grid[r][c], CandyProp::Crushed))
+			if (candyCheck(_grid[r][c], CandyProperty::Crushed))
 				_grid[r][c] = 0;
 		}
 	}
@@ -52,11 +52,12 @@ void gridStep(){
 }
 
 bool candyCrush(int row, int col, bool incrementScore){
-	if (row < 0 || col < 0 || row > ROWS || col > COLS)
+	if (row < 0 || col < 0 || row > ROWS || col > COLS ||
+		!candyCheck(_grid[row][col], CandyProperty::Crushed))
 		return false;
 	if (incrementScore)
 		_score += candyGetPoints(_grid[row][col]);
-	_grid[row][col] |= CandyProp::Crushed;
+	_grid[row][col] |= CandyProperty::Crushed;
 	return true;
 }
 
@@ -67,17 +68,17 @@ int candyGetRandom(){
 }
 
 int candyGetPoints(int candy){
-	if (candyCheckType(candy, CandyProp::Crushed))
+	if (candyCheck(candy, CandyProperty::Crushed))
 		return 0; // candy already marked as crushed
 	switch (candyGetColor(candy)){
-		case CandyColor::Red:
-		case CandyColor::Yellow:
+		case CandyProperty::Red:
+		case CandyProperty::Yellow:
 			return 30;
-		case CandyColor::Green:
+		case CandyProperty::Green:
 			return 40;
-		case CandyColor::Blue:
+		case CandyProperty::Blue:
 			return 50;
-		case CandyColor::Orange:
+		case CandyProperty::Orange:
 			return 60;
 		default:
 			return 0;
@@ -85,23 +86,19 @@ int candyGetPoints(int candy){
 }
 
 int candyGetColor(int candy){
-	return candy & CandyColor::AllColors;
+	return candy & CandyProperty::ColorBomb;
 }
 
 int candyGetType(int candy){
-	return candy & CandyProp::AllProps;
+	return candy & CandyProperty::AllProps;
 }
 
-bool candyCheck(int candy, int color){
-	return (candy & color) != 0;
-}
-
-bool candyCheck(int candy, int color, int type){
-	return (candy & color) != 0 && (candy & type) != 0;
-}
-
-bool candyCheckType(int candy, int type){
+bool candyCheck(int candy, int type){
 	return (candy & type) != 0;
+}
+
+bool candyCheck(int candy, int type1, int type2){
+	return (candy & type1) != 0 && (candy & type2) != 0;
 }
 
 bool swapIsPossible(int r1, int c1, int r2, int c2){

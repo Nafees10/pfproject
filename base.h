@@ -4,26 +4,31 @@
 #define ROWS 9
 #define COLS 9
 
-enum CandyColor : int{
+/// Candy properties (color + wrapped/...)
+enum CandyProperty : int{
+	/// Red
 	Red			= 1 << 0,
+	/// Yellow
 	Yellow		= 1 << 1,
+	/// Green
 	Green		= 1 << 2,
+	/// Blue
 	Blue		= 1 << 3,
+	/// Orange
 	Orange		= 1 << 4,
-	ColorBomb	= 1 << 5,
-	AllColors	= Red | Yellow | Green | Blue | Orange | ColorBomb,
-};
-
-enum CandyProp : int{
-	/// plain candy
-	Simple		= 1 << 8,
-	/// wrapped candy
-	Wrapped		= 1 << 9,
-	/// stripped candy
-	Stripped	= 1 << 10,
-	/// will be crushed before updating screen
-	Crushed		= 1 << 11,
-	AllProps	= Simple | Wrapped | Stripped,
+	/// Color Bomb (i.e: all colors)
+	ColorBomb	= Red | Yellow | Green | Blue | Orange,
+	/// Plain candy
+	Plain		= 1 << 5,
+	/// Wrapped candy
+	Wrapped		= 1 << 6,
+	/// Stripped candy
+	Stripped	= 1 << 7,
+	/// Crushed candy
+	Crushed		= 1 << 8,
+	/// All properties (Plan + Wrapped + Stripped + Crushed)
+	/// ONLY FOR UNDER THE HOOD WORKING, DO NOT USE CandyProperty::AllProps
+	AllProps	= Plain | Wrapped | Stripped | Crushed,
 };
 
 /// initializes level
@@ -40,7 +45,7 @@ void gridStep();
 
 /// crushes the candy at a cell
 ///
-/// Returns: true if done, false if invalid row/col
+/// Returns: true if done, false if invalid row/col or already marked as crushed
 bool candyCrush(int row, int col, bool incrementScore);
 
 /// Returns: a random candy
@@ -49,26 +54,19 @@ int candyGetRandom();
 /// Returns: number of points for crushing a candy
 int candyGetPoints(int candy);
 
-/// Returns: candy's color. Match with CandyColor::X
+/// Returns: candy's color. Match with CandyProperty::X
 int candyGetColor(int candy);
 
-/// Returns: candy's properties. Match with CandyProp::X
+/// Returns: candy's properties. Match with CandyProperty::X
 int candyGetType(int candy);
 
-/// Returns: true if a `candy` is of `color`
-///
-/// color comes from CandyColor::X
-bool candyCheck(int candy, int color);
+/// Returns: true if a `candy` is of a type.
+/// type is told by CandyProperty::X
+bool candyCheck(int candy, int type1);
 
-/// Returns: true if a `candy` is of `color` and of `type`
-///
-/// color comes from CandyColor::X, type from CandyType::X
-bool candyCheck(int candy, int color, int type);
-
-/// checks type of candy.
-///
-/// Returns: true if matches
-bool candyCheckType(int candy, int type);
+/// Returns: true if a `candy` is of type1 and type2
+/// types are told by CandyProperty::X
+bool candyCheck(int candy, int type1, int type2);
 
 /// Returns: true if a swap can happen
 bool swapIsPossible(int r1, int c1, int r2, int c2);
