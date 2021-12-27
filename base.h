@@ -22,21 +22,21 @@ enum CandyProperty : int{
 	Plain		= 1 << 5,
 	/// Wrapped candy
 	Wrapped		= 1 << 6,
-	/// Stripped candy
-	Stripped	= 1 << 7,
-	/// Horizontal Stripped
-	HStripped	= (1 << 8) | Stripped,
-	/// Vertical Stripped
-	VStripped	= (1 << 9) | Stripped,
+	/// Striped candy
+	Striped		= 1 << 9,
+	/// Horizontal Striped
+	HStriped	= (1 << 7) | Striped,
+	/// Vertical Striped
+	VStriped	= (1 << 8) | Striped,
 	/// Crushed candy
 	Crushed		= 1 << 10,
-	/// All properties (Plan + Wrapped + Stripped + Crushed)
+	/// All properties (Plan + Wrapped + Striped + Crushed)
 	/// ONLY FOR UNDER THE HOOD WORKING, DO NOT USE CandyProperty::AllProps
-	AllProps	= Plain | Wrapped | Stripped | Crushed,
+	AllProps	= Plain | Wrapped | Striped | Crushed,
 };
 
 /// initializes level
-void init();
+void init(int offX, int offY, int cellLength, int border);
 
 /// initializes grid to empty
 void gridInit();
@@ -64,7 +64,7 @@ int candyGetPoints(int candy);
 /// Returns: candy's color. Match with CandyProperty::X
 int candyGetColor(int candy);
 
-/// Returns: candy's properties. Match with CandyProperty::X
+/// Returns: canhdy's properties. Match with CandyProperty::X
 int candyGetType(int candy);
 
 /// Returns: true if a `candy` is of a type.
@@ -81,6 +81,8 @@ bool swapIsPossible(int r1, int c1, int r2, int c2);
 /// Swaps two cells, and tries to match if there is any
 ///
 /// Returns: true if swap happened, false if not possible
-bool swwp(int r1, int c1, int r2, int c2);
+bool swap(int r1, int c1, int r2, int c2);
+
+void run();
 
 #endif

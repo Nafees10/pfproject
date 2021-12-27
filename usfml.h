@@ -128,15 +128,25 @@ bool eventGet(Event &event);
 void sleep(int msecs);
 
 /// Clears window
-void frameClear();
+void frameClear(unsigned int color = 0x000000);
 
 /// display frame
 void framePush();
 
-/// Creates an object, from an image
+/// Loads a texture
 ///
-/// Returns: object ID (0 - 255), or -1 if max objects reached, or -2 if invalid image
-int objectCreate(char* imagePath);
+/// Returns: teture index, or -1 if maximum textures loaded, or -2 if failed.
+int objectLoadTexture(char* imagePath);
+
+/// Creates an object, from texture
+///
+/// Returns: object ID (0 - 255), or -1 if max objects reached
+int objectCreate(int textureIndex);
+
+/// sets a texture for a object
+///
+/// Returns: true if done, false if index out of bounds or no exist
+bool objectSetTexture(int index, int textureIndex);
 
 /// Returns: true if an object with object id = index exists
 bool objectExists(int index);

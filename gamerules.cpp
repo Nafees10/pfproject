@@ -24,8 +24,13 @@
 /// if (candyCheck(grid[0][0], CandyProperty::Plain))
 /// 	cout << "Candy is plain";
 /// if (candyCheck(grid[0][0], CandyProperty:::Blue, CandyProperty::Stripped))
-/// 	cout << "Blue and stripped";
+/// 	cout << "Blue and striped";
 
 /// To create a candy of a color and a type (Plain/Wrapped/Stripped)
 /// use candyGet(color, type);
 /// int candy = candyGet(CandyProperty::ColorBomb, 0);
+
+/// function prototype for all rules will be:
+/// bool name(int[ROWS][COLS] grid, int r1, int c1, int r2, int c2)
+/// the function will return true if it did some chnages to grid, false if not
+/// r1, c1 and r2, c2 are the candies that were swapped

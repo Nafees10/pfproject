@@ -173,7 +173,7 @@ void sleep(int msecs){
 	sf::sleep(sf::Time(sf::milliseconds(msecs)));
 }
 
-void frameClear(unsigned int color = 0x000000){
+void frameClear(unsigned int color){
 	if (!_initialised)
 		return;
 	_window->clear(sf::Color(color));
@@ -183,7 +183,7 @@ void framePush(){
 	_window->display();
 }
 
-int objectCreate(char* imagePath){
+int objectLoadTexture(char* imagePath){
 	// look for nullptr
 	int index = 0;
 	while (index < MAX_OBJECTS && _texture[index] != nullptr)
@@ -191,12 +191,32 @@ int objectCreate(char* imagePath){
 	if (index >= MAX_OBJECTS)
 		return -1;
 	_texture[index] = new sf::Texture();
-	if (_texture[index]->loadFromFile(imagePath)){
-		_sprite[index] = new sf::Sprite(*(_texture[index]));
+	if (_texture[index]->loadFromFile(imagePath))
 		return index;
-	}
 	delete _texture[index];
 	return -2;
+}
+
+int objectCreate(int textureIndex){
+	int index = 0;
+	while (index < MAX_OBJECTS && _sprite[index] != nullptr)
+		index ++;
+	if (index >= MAX_OBJECTS)
+		return -1;
+	_sprite[index] = new sf::Sprite();
+	if (textureIndex >= 0 && textureIndex < MAX_OBJECTS &&
+		_texture[textureIndex] != nullptr)
+		_sprite[index]->setTexture(*(_texture[textureIndex]));
+	return index;
+}
+
+bool objectSetTexture(int index, int textureIndex){
+	if (index < 0 || textureIndex < 0 ||
+		index >= MAX_OBJECTS || textureIndex >= MAX_OBJECTS ||
+		_texture[textureIndex] == nullptr || _sprite[index] == nullptr)
+		return false;
+	_sprite[index]->setTexture(*(_texture[textureIndex]));
+	return true;
 }
 
 bool objectExists(int index){
