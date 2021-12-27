@@ -169,6 +169,10 @@ bool eventGet(Event &event){
 	return true;
 }
 
+void sleep(int msecs){
+	sf::sleep(sf::Time(sf::milliseconds(msecs)));
+}
+
 void frameClear(unsigned int color = 0x000000){
 	if (!_initialised)
 		return;

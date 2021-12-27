@@ -124,6 +124,9 @@ struct Event{
 /// Returns: true if a event was returned, false if no
 bool eventGet(Event &event);
 
+/// Sleep for milliseconds
+void sleep(int msecs);
+
 /// Clears window
 void frameClear();
 
