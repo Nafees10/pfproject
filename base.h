@@ -56,7 +56,7 @@ bool candyCrush(int row, int col, bool incrementScore);
 int candyGetRandom();
 
 /// Returns: candy whose color is `color` and has a CandyProperty
-int candyGet();
+int candyGet(int color, int property);
 
 /// Returns: number of points for crushing a candy
 int candyGetPoints(int candy);

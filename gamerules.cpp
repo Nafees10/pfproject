@@ -15,7 +15,7 @@
 /// similarly, candyGetType will return its properties
 /// eg:
 /// if (candyGetType(grid[0][0]) == CandyProperty::Wrapped)
-/// 	cout << "Candy at 0,0 is red"
+/// 	cout << "Candy at 0,0 is Wrapped"
 
 /// or you can use candyCheck to check if color and/or type matches
 /// eg:
@@ -25,3 +25,7 @@
 /// 	cout << "Candy is plain";
 /// if (candyCheck(grid[0][0], CandyProperty:::Blue, CandyProperty::Stripped))
 /// 	cout << "Blue and stripped";
+
+/// To create a candy of a color and a type (Plain/Wrapped/Stripped)
+/// use candyGet(color, type);
+/// int candy = candyGet(CandyProperty::ColorBomb, 0);
