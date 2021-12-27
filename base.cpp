@@ -79,7 +79,6 @@ void gridStep(){
 		for (int c = 0; c < COLS; c ++){
 			if (candyCheck(_grid[r][c], CandyProperty::Crushed)){
 				_grid[r][c] = 0;
-				std::cout << "crushing " << c << ", " << r << "\n";
 			}
 		}
 	}
@@ -90,6 +89,7 @@ void gridStep(){
 				shift --;
 			}else if (shift > 0){
 				_grid[r][c] = _grid[r + shift][c];
+				std::cout << "moved " << r + shift << " to " << r << "\n";
 			}
 			r --;
 		}
@@ -101,20 +101,21 @@ void gridStep(){
 }
 
 void gridUpdateTextures(){
-	for (int y = 0; y < ROWS; y ++){
-		for (int x = 0; x < COLS; x ++){
-			int candy = _grid[y][x];
+	// TODO: invalid, fix this
+	/*for (int r = 0; r < ROWS; r ++){
+		for (int c = 0; c < COLS; c ++){
+			int candy = _grid[r][c];
 			int textureId = -1;
 			for (int i = 0; i < 21 && textureId == -1; i ++){
 				if (candyCheck(_candyIndex[i], candyGetColor(candy),
 							   candyGetType(candy)))
 					textureId = _candyTexture[i];
 			}
-			if (textureId == -1)
-				continue;
-			objectSetTexture(_objects[y][x], textureId);
+			if (textureId > -1){
+				objectSetTexture(_objects[r][c], textureId);
+			}
 		}
-	}
+	}*/
 }
 
 bool candyCrush(int row, int col, bool incrementScore){
@@ -129,7 +130,7 @@ bool candyCrush(int row, int col, bool incrementScore){
 
 int candyGetRandom(){
 	int candy = 1 << (rand() % 5); // color, 0 to 4
-	candy |= 1 << (5 + (rand() % 4)); // property
+	candy |= CandyProperty::Plain; // property
 	// randomise for color bomb
 	if (rand() % 10 == 1)
 		candy = CandyProperty::ColorBomb | CandyProperty::Plain;
@@ -293,6 +294,10 @@ void run(){
 		}
 	}
 	bool readyForInput = false;
+	for (int r = 0; r < ROWS; r ++){
+		for (int c = 0; c < COLS; c ++)
+			_grid[r][c] = candyGetRandom();
+	}
 	// loop for game
 	while (isRunning){
 		frameClear(0xFFFFFF);

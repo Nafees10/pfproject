@@ -22,17 +22,15 @@ enum CandyProperty : int{
 	Plain		= 1 << 5,
 	/// Wrapped candy
 	Wrapped		= 1 << 6,
-	/// Striped candy
-	Striped		= 1 << 9,
 	/// Horizontal Striped
-	HStriped	= (1 << 7) | Striped,
+	HStriped	= 1 << 7,
 	/// Vertical Striped
-	VStriped	= (1 << 8) | Striped,
+	VStriped	= 1 << 8,
 	/// Crushed candy
 	Crushed		= 1 << 10,
 	/// All properties (Plan + Wrapped + Striped + Crushed)
 	/// ONLY FOR UNDER THE HOOD WORKING, DO NOT USE CandyProperty::AllProps
-	AllProps	= Plain | Wrapped | Striped | Crushed,
+	AllProps	= Plain | Wrapped | HStriped | VStriped | Crushed,
 };
 
 /// initializes level
