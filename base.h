@@ -24,8 +24,12 @@ enum CandyProperty : int{
 	Wrapped		= 1 << 6,
 	/// Stripped candy
 	Stripped	= 1 << 7,
+	/// Horizontal Stripped
+	HStripped	= (1 << 8) | Stripped,
+	/// Vertical Stripped
+	VStripped	= (1 << 9) | Stripped,
 	/// Crushed candy
-	Crushed		= 1 << 8,
+	Crushed		= 1 << 10,
 	/// All properties (Plan + Wrapped + Stripped + Crushed)
 	/// ONLY FOR UNDER THE HOOD WORKING, DO NOT USE CandyProperty::AllProps
 	AllProps	= Plain | Wrapped | Stripped | Crushed,
@@ -50,6 +54,9 @@ bool candyCrush(int row, int col, bool incrementScore);
 
 /// Returns: a random candy
 int candyGetRandom();
+
+/// Returns: candy whose color is `color` and has a CandyProperty
+int candyGet();
 
 /// Returns: number of points for crushing a candy
 int candyGetPoints(int candy);

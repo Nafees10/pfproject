@@ -67,6 +67,11 @@ int candyGetRandom(){
 	return candy;
 }
 
+int candyGet(int color, int property){
+	return (color & CandyProperty::ColorBomb) |
+		(property & CandyProperty::AllProps);
+}
+
 int candyGetPoints(int candy){
 	if (candyCheck(candy, CandyProperty::Crushed))
 		return 0; // candy already marked as crushed
