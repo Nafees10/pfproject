@@ -5,23 +5,93 @@ using namespace std;
 
 const int c = 9;
 const int r = 9;
-
-void fill(int arr[][c]);
-void check_bomb(int arr[][c]);
-void check_wrap(int arr[][c]);
-void check_strip(int arr[][c]);
-void simple(int arr[][c]);
-void special_move(int arr[][c], int i, int j);
-void striped_special(int arr[][c], int i, int j);
-void wrapped_special(int arr[][c], int i, int j);
-void bomb_special(int arr[][c], int i, int j);
+void checkoverall(int arr[][c],int r1,int c1,int r2,int c2); //checks if special candies are moved or not
+void special_special(int arr[][c], int r1, int c1, int r2, int c2); // effect of two special candies mixed together (not complete)
+void fill(int arr[][c]);//after any combinations fills grid again
+void check_bomb(int arr[][c]);//checks if any color bomb is forming
+void check_wrap(int arr[][c]);//checks for wrapped candy
+void check_strip(int arr[][c]);//checks formation of striped candy
+void simple(int arr[][c]);//checks any combination
+void special_move(int arr[][c], int i, int j);//choosing between functions of special candies or 0
+void striped_special(int arr[][c], int i, int j);// special effect of striped
+void wrapped_special(int arr[][c], int i, int j);//special effect of wrapped
+void bomb_special(int arr[][c], int i, int j);//special effect of bomb if exploded due to other candy's special effect
 
 int main()
 {
     int arr[r][c] = { 0 };
-
     fill(arr);
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+            cout << arr[i][j]<<" ";
+        cout << endl;
+    }
+    
     return 0;
+}
+
+void checkoverall(int arr[][c], int r1, int c1, int r2, int c2)
+{
+    if ((arr[r1][c1] > 5 && arr[r2][c2] > 5) || arr[r1][c1]==21||arr[r2][c2]==21)
+        special_special(arr, r1, c1, r2, c2);
+    else
+    {
+        check_bomb(arr);
+        check_wrap(arr);
+        check_strip(arr);
+        simple(arr);
+    }
+}
+void special_special(int arr[][c], int r1, int c1, int r2, int c2)
+{
+    if (arr[r1][c1] > 5 && arr[r1][c1] < 16 && arr[r2][c2]>5 && arr[r2][c2] < 16)
+    {
+        arr[r1][c1] = 0;
+        arr[r2][c2] = 0;
+        for (int k = 0; k < c; k++)
+            special_move(arr, r2, k);
+        for (int k = 0; k < r; k++)
+            special_move(arr, k, c2);
+    }
+    if ((arr[r1][c1] > 5 && arr[r1][c1] < 16 && arr[r2][c2]>15 && arr[r2][c2] < 21) || (arr[r2][c2] > 5 && arr[r2][c2] < 16 && arr[r1][c1]>15 && arr[r1][c1] < 21))
+    {
+        arr[r1][c1] = 0;
+        arr[r2][c2] = 0;
+        for (int k = 0; k < c; k++)
+            special_move(arr, r2, k);
+        for (int k = 0; k < r; k++)
+            special_move(arr, k, c2);
+        if (r2 + 1 < r)
+        {
+            for (int k = 0; k < c; k++)
+                special_move(arr, (r2+1), k);
+        }
+        if (r2 - 1 >= 0)
+        {
+            for (int k = 0; k < c; k++)
+                special_move(arr, (r2 - 1), k);
+        }
+        if (c2 + 1 < r)
+        {
+            for (int k = 0; k < r; k++)
+                special_move(arr, k, (c2+1));
+        }
+        if (c2 - 1 >= 0)
+        {
+            for (int k = 0; k < r; k++)
+                special_move(arr, k, (c2-1));
+        }
+    }
+    if (arr[r1][c1] > 15 && arr[r1][c1] < 21 && arr[r2][c2] > 15 && arr[r2][c2] < 21)
+    {
+        arr[r1][c1] = -2;
+        arr[r2][c2] = -2;
+
+    }
+    if (arr[r1][c1] == 21 && arr[r2][c2] == 21)
+        arr = { 0 };
+
 }
 
 void fill(int arr[][c])
@@ -44,14 +114,6 @@ void fill(int arr[][c])
             if (arr[0][k] == 0)
                 arr[0][k] = rand() % 5 + 1;
         }
-    }
-    for (int j = 0; j < r; j++)
-    {
-        for (int k = 0; k < c; k++)
-        {
-            cout << arr[j][k];
-        }
-        cout << endl;
     }
 }
 void check_bomb(int arr[][c])    //value of candybomb(21)
@@ -301,8 +363,7 @@ void simple(int arr[][c])
 {
     for (int j = 0; j < r; j++)
     {
-        for (int i = 0; i < c - 2; i++)
-        {
+        for (int i = 0; i < c - 2; i++) {
             int temp = 6;
             if (arr[j][i] < 21)
                 temp = (arr[j][i] % 5);
