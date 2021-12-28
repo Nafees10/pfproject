@@ -174,7 +174,7 @@ bool fontLoad(char* path);
 /// Creates text
 ///
 /// Returns: text ID, or -1 if fail
-int textCreate(char* text);
+int textCreate(int size, int color);
 
 /// Returns: true if a text exists
 bool textExists(int index);
@@ -183,6 +183,11 @@ bool textExists(int index);
 ///
 /// Returns: true if done, false if no exist
 bool textSet(int index, char* text);
+
+/// changes text
+///
+/// Returns: true if done, false if no exist
+bool textSet(int index, int text);
 
 /// Returns: text width, or -1 if invalid
 int textGetWidth(int index);

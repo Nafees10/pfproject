@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "usfml.h"
+#include <string>
 
 /// if everything has been initialised
 bool _initialised = false;
@@ -180,7 +181,7 @@ void sleep(int msecs){
 void frameClear(unsigned int color){
 	if (!_initialised)
 		return;
-	_window->clear(sf::Color(color));
+	_window->clear(sf::Color(color | 255));
 }
 
 void framePush(){
@@ -230,7 +231,8 @@ bool objectExists(int index){
 bool objectMove(int index, int x, int y){
 	if (!objectExists(index))
 		return false;
-	_sprite[index]->move(x, y);
+	_sprite[index]->move(x - _sprite[index]->getPosition().x,
+						 y - _sprite[index]->getPosition().y);
 	return true;
 }
 
@@ -255,14 +257,15 @@ bool fontLoad(char* path){
 	return _font.loadFromFile(path);
 }
 
-int textCreate(char* text, int size){
+int textCreate(int size, int color){
 	int index = 0;
 	while (index < MAX_OBJECTS && _text[index] != nullptr)
 		index ++;
 	if (index >= MAX_OBJECTS)
 		return -1;
-	_text[index] = new sf::Text(text, _font, size);
-	return true;
+	_text[index] = new sf::Text("", _font, size);
+	_text[index]->setFillColor(sf::Color(color | 255));
+	return index;
 }
 
 bool textExists(int index){
@@ -273,6 +276,14 @@ bool textSet(int index, char* text){
 	if (!textExists(index))
 		return false;
 	_text[index]->setString(text);
+	return true;
+}
+
+bool textSet(int index, int text){
+	if (!textExists(index))
+		return false;
+	std::string str = std::to_string(text);
+	_text[index]->setString((char*)(str.c_str()));
 	return true;
 }
 
