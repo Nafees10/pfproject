@@ -87,11 +87,303 @@ void special_special(int arr[][c], int r1, int c1, int r2, int c2)
     {
         arr[r1][c1] = -2;
         arr[r2][c2] = -2;
+        if (c1 + 1 < c)
+            special_move(arr, r1, (c1 + 1));
+        if (c1 - 1 >= 0)
+            special_move(arr, r1, (c1 - 1));
+        if (c1 + 2 < c)
+            special_move(arr, r1, (c1 + 2));
+        if (c1 - 2 >= 0)
+            special_move(arr, r1, (c1 - 2));
+
+        if (r1 - 1 >= 0) {
+            special_move(arr, (r1 - 1), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1-1), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1-1), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1-1), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1-1), (c1 - 2));
+        }
+        if (r1 + 1 < r)
+        {
+            special_move(arr, (r1 + 1), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 + 1), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 + 1), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 + 1), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 + 1), (c1 - 2));
+        }
+        if (r1 - 2 >= 0) {
+            special_move(arr, (r1 - 2), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 - 2), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 - 2), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 - 2), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 - 2), (c1 - 2));
+        }
+        if (r1 + 2 >= 0) {
+            special_move(arr, (r1 + 2), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 + 2), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 + 2), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 + 2), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 + 2), (c1 - 2));
+        }
+        if (c2 + 1 < c)
+            special_move(arr, r2, (c2 + 1));
+        if (c2 - 1 >= 0)
+            special_move(arr, r2, (c2 - 1));
+        if (c2 + 2 < c)
+            special_move(arr, r2, (c2 + 2));
+        if (c2 - 2 >= 0)
+            special_move(arr, r2, (c2 - 2));
+
+        if (r2 - 1 >= 0) {
+            special_move(arr, (r2 - 1), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 - 1), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 - 1), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 - 1), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 - 1), (c2 - 2));
+        }
+        if (r2 + 1 < r)
+        {
+            special_move(arr, (r2 + 1), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 + 1), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 + 1), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 + 1), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 + 1), (c2 - 2));
+        }
+        if (r2 - 2 >= 0) {
+            special_move(arr, (r2 - 2), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 - 2), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 - 2), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 - 2), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 - 2), (c2 - 2));
+        }
+        if (r2 + 2 >= 0) {
+            special_move(arr, (r2 + 2), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 + 2), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 + 2), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 + 2), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 + 2), (c2 - 2));
+        }
+        fill(arr);
+        while (arr[r1][c1] != -2)
+            r1++;
+        while (arr[r2][c2] != -2)
+            r2++;
+        arr[r1][c1] = 0;
+        arr[r2][c2] = 0;
+
+        if (c1 + 1 < c)
+            special_move(arr, r1, (c1 + 1));
+        if (c1 - 1 >= 0)
+            special_move(arr, r1, (c1 - 1));
+        if (c1 + 2 < c)
+            special_move(arr, r1, (c1 + 2));
+        if (c1 - 2 >= 0)
+            special_move(arr, r1, (c1 - 2));
+
+        if (r1 - 1 >= 0) {
+            special_move(arr, (r1 - 1), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 - 1), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 - 1), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 - 1), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 - 1), (c1 - 2));
+        }
+        if (r1 + 1 < r)
+        {
+            special_move(arr, (r1 + 1), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 + 1), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 + 1), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 + 1), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 + 1), (c1 - 2));
+        }
+        if (r1 - 2 >= 0) {
+            special_move(arr, (r1 - 2), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 - 2), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 - 2), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 - 2), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 - 2), (c1 - 2));
+        }
+        if (r1 + 2 >= 0) {
+            special_move(arr, (r1 + 2), c1);
+            if (c1 + 1 < c)
+                special_move(arr, (r1 + 2), (c1 + 1));
+            if (c1 - 1 >= 0)
+                special_move(arr, (r1 + 2), (c1 - 1));
+            if (c1 + 2 < c)
+                special_move(arr, (r1 + 2), (c1 + 2));
+            if (c1 - 2 >= 0)
+                special_move(arr, (r1 + 2), (c1 - 2));
+        }
+        if (c2 + 1 < c)
+            special_move(arr, r2, (c2 + 1));
+        if (c2 - 1 >= 0)
+            special_move(arr, r2, (c2 - 1));
+        if (c2 + 2 < c)
+            special_move(arr, r2, (c2 + 2));
+        if (c2 - 2 >= 0)
+            special_move(arr, r2, (c2 - 2));
+
+        if (r2 - 1 >= 0) {
+            special_move(arr, (r2 - 1), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 - 1), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 - 1), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 - 1), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 - 1), (c2 - 2));
+        }
+        if (r2 + 1 < r)
+        {
+            special_move(arr, (r2 + 1), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 + 1), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 + 1), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 + 1), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 + 1), (c2 - 2));
+        }
+        if (r2 - 2 >= 0) {
+            special_move(arr, (r2 - 2), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 - 2), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 - 2), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 - 2), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 - 2), (c2 - 2));
+        }
+        if (r2 + 2 >= 0) {
+            special_move(arr, (r2 + 2), c2);
+            if (c2 + 1 < c)
+                special_move(arr, (r2 + 2), (c2 + 1));
+            if (c2 - 1 >= 0)
+                special_move(arr, (r2 + 2), (c2 - 1));
+            if (c2 + 2 < c)
+                special_move(arr, (r2 + 2), (c2 + 2));
+            if (c2 - 2 >= 0)
+                special_move(arr, (r2 + 2), (c2 - 2));
+        }
+    }
+    if ((arr[r1][c1] == 21 && arr[r2][c2] < 5 && arr[r2][c2] > 0) || (arr[r2][c2] == 21 && arr[r1][c1] < 5 && arr[r1][c1] > 0))
+    {
+        int temp = arr[r1][c1] % 5 + 1;
+        if (arr[r1][c1] > arr[r2][c2])
+            temp = arr[r2][c2] % 5 + 1;
+        for (int row = 0; row < r; row++)
+        {
+            for (int col = 0; col < 0; col++)
+            {
+                if(arr[row][col]!=21 && (arr[row][col]%5+1==temp))
+                    special_move(arr, row, col);
+            }
+        }
+            
+    }
+    if ((arr[r1][c1] == 21 && arr[r2][c2] > 5 && arr[r2][c2] < 16) || (arr[r2][c2] == 21 && arr[r1][c1] < 16 && arr[r1][c1] > 5))
+    {
+        int temp = arr[r1][c1] % 5 + 1;
+        if (arr[r1][c1] > arr[r2][c2])
+            temp = arr[r2][c2] % 5 + 1;
+        bool b = 0;
+        for (int row = 0; row < r; row++)
+        {
+            for (int col = 0; col < 0; col++)
+            {
+                if (arr[row][col] != 21 && (arr[row][col] % 5 + 1 == temp))
+                { 
+                    if (arr[row][col] > 15)
+                        arr[row][col] -= 5;
+                    else if (arr[row][col] < 6)
+                    {
+                        if (!b)
+                        {
+                            b = 1;
+                            arr[row][col] += 5;
+                        }
+                        else
+                        {
+                            b = 0;
+                            arr[row][col] += 10;
+                        }
+                    }
+                    special_move(arr, row, col);
+                }
+                    
+            }
+        }
+
+    }
+    if ((arr[r1][c1] == 21 && arr[r2][c2] > 15 && arr[r2][c2] < 21) || (arr[r2][c2] == 21 && arr[r1][c1] > 15 && arr[r1][c1] < 21))
+    {
+        int temp = arr[r1][c1] % 5 + 1;
+        if (arr[r1][c1] > arr[r2][c2])
+            temp = arr[r2][c2] % 5 + 1;
+        
+        for (int row = 0; row < r; row++)
+        {
+            for (int col = 0; col < 0; col++)
+            {
+                if (arr[row][col] != 21 && (arr[row][col] % 5 + 1 == temp))
+                {
+                    while (arr[row][col] < 16)
+                        arr[row][col] += 5;
+                    special_move(arr, row, col);
+                }
+
+            }
+        }
 
     }
     if (arr[r1][c1] == 21 && arr[r2][c2] == 21)
         arr = { 0 };
-
 }
 
 void fill(int arr[][c])
@@ -399,7 +691,7 @@ void special_move(int arr[][c], int i, int j)
         striped_special(arr, i, j);
     else if (arr[i][j] < 21)
         wrapped_special(arr, i, j);
-    else
+    else if(arr[i][j]==21)
         bomb_special(arr, i, j);
 }
 void striped_special(int arr[][c], int i, int j)
@@ -422,21 +714,16 @@ void wrapped_special(int arr[][c], int i, int j)
     if (arr[i][j] > 15 && arr[i][j] < 21)
     {
         arr[i][j] = -1;
-
+        if (j + 1 < c)
+            special_move(arr, i, (j + 1));
+        if (j - 1 >= 0)
+            special_move(arr, i, (j - 1));
         if (i - 1 >= 0) {
             special_move(arr, (i - 1), j);
             if (j + 1 < c)
-            {
                 special_move(arr, (i - 1), (j + 1));
-
-                special_move(arr, i, (j + 1));
-            }
             if (j - 1 >= 0)
-            {
                 special_move(arr, (i - 1), (j - 1));
-
-                special_move(arr, i, (j - 1));
-            }
         }
         if (i + 1 < r)
         {
@@ -446,39 +733,34 @@ void wrapped_special(int arr[][c], int i, int j)
             if (j - 1 >= 0)
                 special_move(arr, (i + 1), (j - 1));
         }
-
-    }
-    fill(arr);
-    for (int k = 1; k < r; k++)
-        if (arr[k][j] == -1)
-        {
-            arr[k][j] = 0;
-
-            if (k - 1 >= 0) {
-                special_move(arr, (k - 1), j);
-                if (j + 1 < c)
-                {
-                    special_move(arr, k, (j + 1));
-
-                    special_move(arr, (k-1), (j + 1));
-                }
-                if (j - 1 >= 0)
-                {
-                    special_move(arr, (k - 1), (j - 1));
-
-                    special_move(arr, k, (j - 1));
-                }
-            }
-            if (k + 1 < r)
+        fill(arr);
+        for (int k = 1; k < r; k++) {
+            if (arr[k][j] == -1)
             {
-                special_move(arr, (k + 1), j);
+                arr[k][j] = 0;
                 if (j + 1 < c)
-                    special_move(arr, (k + 1), (j + 1));
-            
+                    special_move(arr, k, (j + 1));
                 if (j - 1 >= 0)
-                    special_move(arr, (k + 1), (j - 1));         
+                    special_move(arr, k, (j - 1));
+                if (k - 1 >= 0) {
+                    special_move(arr, (k - 1), j);
+                    if (j + 1 < c)
+                        special_move(arr, (k - 1), (j + 1));
+                    if (j - 1 >= 0)
+                        special_move(arr, (k - 1), (j - 1));
+                }
+                if (k + 1 < r)
+                {
+                    special_move(arr, (k + 1), j);
+                    if (j + 1 < c)
+                        special_move(arr, (k + 1), (j + 1));
+
+                    if (j - 1 >= 0)
+                        special_move(arr, (k + 1), (j - 1));
+                }
             }
         }
+    }
 }
 void bomb_special(int arr[][c], int i, int j)
 {
