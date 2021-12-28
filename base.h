@@ -7,6 +7,9 @@
 #define MIN_TARGET 1000
 #define MAX_TARGET 10000
 
+#define MIN_MOVES 20
+#define MAX_MOVES 30
+
 /// Candy properties (color + wrapped/...)
 enum CandyProperty : int{
 	/// Red
@@ -37,7 +40,7 @@ enum CandyProperty : int{
 };
 
 /// initializes level
-void init(int offX, int offY, int cellLength, int border);
+void init();
 
 /// initializes grid to empty
 void gridInit();
@@ -78,6 +81,9 @@ bool candyCheck(int candy, int type1, int type2);
 
 /// Returns: true if a swap can happen
 bool swapIsPossible(int r1, int c1, int r2, int c2);
+
+/// Tries to crush all candies that can be crushed
+void gridTryCrush();
 
 /// Swaps two cells, and tries to match if there is any
 ///
