@@ -15,6 +15,10 @@ bool _eventWaiting = false;
 sf::Texture *_texture[MAX_OBJECTS] = {nullptr};
 /// Sprites
 sf::Sprite *_sprite[MAX_OBJECTS] = {nullptr};
+/// font
+sf::Font _font;
+/// Text
+sf::Text *_text[MAX_OBJECTS] = {nullptr};
 
 bool usfmlInit(int width, int height, char *title){
 	if (_initialised)
@@ -244,5 +248,58 @@ bool objectDestroy(int index){
 	delete _texture[index];
 	_sprite[index] = nullptr;
 	_texture[index] = nullptr;
+	return true;
+}
+
+bool fontLoad(char* path){
+	return _font.loadFromFile(path);
+}
+
+int textCreate(char* text, int size){
+	int index = 0;
+	while (index < MAX_OBJECTS && _text[index] != nullptr)
+		index ++;
+	if (index >= MAX_OBJECTS)
+		return -1;
+	_text[index] = new sf::Text(text, _font, size);
+	return true;
+}
+
+bool textExists(int index){
+	return index >= 0 && index < MAX_OBJECTS && _text[index] != nullptr;
+}
+
+bool textSet(int index, char* text){
+	if (!textExists(index))
+		return false;
+	_text[index]->setString(text);
+	return true;
+}
+
+int textGetWidth(int index){
+	if (!textExists(index))
+		return -1;
+	sf::FloatRect rect = _text[index]->getLocalBounds();
+	return rect.width;
+}
+
+int textGetHeight(int index){
+	if (!textExists(index))
+		return -1;
+	sf::FloatRect rect = _text[index]->getLocalBounds();
+	return rect.height;
+}
+
+bool textMove(int index, int x, int y){
+	if (!textExists(index))
+		return false;
+	_text[index]->move(x, y);
+	return true;
+}
+
+bool textDraw(int index){
+	if (!textExists(index) || !_initialised)
+		return false;
+	_window->draw(*(_text[index]));
 	return true;
 }

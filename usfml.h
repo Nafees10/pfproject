@@ -166,4 +166,39 @@ bool objectDraw(int index);
 /// Returns: true if destroyed, false if doesnt exist
 bool objectDestroy(int index);
 
+/// Loads font
+///
+/// Returns: true if done, false if failed
+bool fontLoad(char* path);
+
+/// Creates text
+///
+/// Returns: text ID, or -1 if fail
+int textCreate(char* text);
+
+/// Returns: true if a text exists
+bool textExists(int index);
+
+/// changes text
+///
+/// Returns: true if done, false if no exist
+bool textSet(int index, char* text);
+
+/// Returns: text width, or -1 if invalid
+int textGetWidth(int index);
+
+/// Returns: text height, or -1 if invalid
+int textGetHeight(int index);
+
+/// moves text to x,y
+///
+/// Returns: true if done, false if not
+bool textMove(int index, int x, int y);
+
+/// draws text
+///
+/// Returns: true if done, false if not
+bool textDraw(int index);
+
+
 #endif
