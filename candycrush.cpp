@@ -5,8 +5,9 @@ using namespace std;
 
 const int c = 9;
 const int r = 9;
+
 void checkoverall(int arr[][c],int r1,int c1,int r2,int c2); //checks if special candies are moved or not
-void special_special(int arr[][c], int r1, int c1, int r2, int c2); // effect of two special candies mixed together (not complete)
+void special_special(int arr[][c], int r1, int c1, int r2, int c2); // effect of two special candies mixed together 
 void fill(int arr[][c]);//after any combinations fills grid again
 void check_bomb(int arr[][c]);//checks if any color bomb is forming
 void check_wrap(int arr[][c]);//checks for wrapped candy
@@ -20,7 +21,21 @@ void bomb_special(int arr[][c], int i, int j);//special effect of bomb if explod
 int main()
 {
     int arr[r][c] = { 0 };
+    
+    
     fill(arr);
+    arr[3][3] = 19;
+    arr[3][4] = 16;
+    check_bomb(arr);
+    fill(arr);
+    for (int i = 0; i < r; i++)
+    {
+        for (int j = 0; j < c; j++)
+            cout << arr[i][j] << " ";
+        cout << endl;
+    }
+    system("pause");
+    checkoverall(arr, 3,3, 3, 4);
     for (int i = 0; i < r; i++)
     {
         for (int j = 0; j < c; j++)
@@ -317,9 +332,11 @@ void special_special(int arr[][c], int r1, int c1, int r2, int c2)
         int temp = arr[r1][c1] % 5 + 1;
         if (arr[r1][c1] > arr[r2][c2])
             temp = arr[r2][c2] % 5 + 1;
+        arr[r1][c1] = 0;
+        arr[r2][c2] = 0;
         for (int row = 0; row < r; row++)
         {
-            for (int col = 0; col < 0; col++)
+            for (int col = 0; col < c; col++)
             {
                 if(arr[row][col]!=21 && (arr[row][col]%5+1==temp))
                     special_move(arr, row, col);
@@ -332,10 +349,12 @@ void special_special(int arr[][c], int r1, int c1, int r2, int c2)
         int temp = arr[r1][c1] % 5 + 1;
         if (arr[r1][c1] > arr[r2][c2])
             temp = arr[r2][c2] % 5 + 1;
+        arr[r1][c1] = 0;
+        arr[r2][c2] = 0;
         bool b = 0;
         for (int row = 0; row < r; row++)
         {
-            for (int col = 0; col < 0; col++)
+            for (int col = 0; col < c; col++)
             {
                 if (arr[row][col] != 21 && (arr[row][col] % 5 + 1 == temp))
                 { 
@@ -366,10 +385,12 @@ void special_special(int arr[][c], int r1, int c1, int r2, int c2)
         int temp = arr[r1][c1] % 5 + 1;
         if (arr[r1][c1] > arr[r2][c2])
             temp = arr[r2][c2] % 5 + 1;
+        arr[r1][c1] = 0;
+        arr[r2][c2] = 0;
         
         for (int row = 0; row < r; row++)
         {
-            for (int col = 0; col < 0; col++)
+            for (int col = 0; col < c; col++)
             {
                 if (arr[row][col] != 21 && (arr[row][col] % 5 + 1 == temp))
                 {
@@ -385,7 +406,6 @@ void special_special(int arr[][c], int r1, int c1, int r2, int c2)
     if (arr[r1][c1] == 21 && arr[r2][c2] == 21)
         arr = { 0 };
 }
-
 void fill(int arr[][c])
 {
     for (int j = 0; j < r; j++)
