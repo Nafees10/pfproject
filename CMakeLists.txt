@@ -12,7 +12,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(SFML)
 
-add_executable(pfproject main.cpp usfml.cpp base.cpp)
+add_executable(pfproject main.cpp usfml.cpp base.cpp gamerules.cpp)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED true)
