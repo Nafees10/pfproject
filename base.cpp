@@ -171,12 +171,19 @@ bool candyCrush(int row, int col){
 	return true;
 }
 
+void candyCrush(int r1, int c1, int r2, int c2){
+	for (int r = r1; r <= r2; r++){
+		for (int c = c1; c <= c2; c ++)
+			candyCrush(r,c);
+	}
+}
+
 int candyGetRandom(){
-	int candy = 1 << (rand() % 4); // color, 0 to 4
+	int candy = 1 << (rand() % 5); // color, 0 to 4
 	//candy |= CandyProperty::Plain; // property
-	int rP = 5 + (rand() % 4);
+	int rP = 6 + (rand() % 4);
 	candy |= 1 << rP;
-	if (rP == 7 || rP == 8)
+	if (rP == 8 || rP == 9)
 		candy |= CandyProperty::Striped;
 	// randomise for color bomb
 	if (rand() % 10 == 1)
@@ -185,7 +192,7 @@ int candyGetRandom(){
 }
 
 int candyGet(int color, int property){
-	return (color & CandyProperty::ColorBomb) |
+	return (color & CandyProperty::AllColors) |
 		(property & CandyProperty::AllProps);
 }
 
@@ -208,7 +215,7 @@ int candyGetPoints(int candy){
 }
 
 int candyGetColor(int candy){
-	return candy & CandyProperty::ColorBomb;
+	return candy & CandyProperty::AllColors;
 }
 
 int candyGetType(int candy){
@@ -236,8 +243,8 @@ bool swapIsPossible(int r1, int c1, int r2, int c2){
 }
 
 void gridTryCrush(){
-	bool flag = false;
-
+	move6(_grid)/* || move5(_grid) || move4(_grid) || move3(_grid) ||
+		move2(_grid) || move1(_grid)*/;
 }
 
 bool swap(int r1, int c1, int r2, int c2){
@@ -248,9 +255,9 @@ bool swap(int r1, int c1, int r2, int c2){
 	_grid[r2][c2] = tempCandy;
 	// try all move functions
 	bool flag = false;
-	flag = move12(_grid, r1, c1, r2, c2) || move11(_grid, r1, c1, r2, c2) ||
+	/*flag = move12(_grid, r1, c1, r2, c2) || move11(_grid, r1, c1, r2, c2) ||
 		move10(_grid, r1, c1, r2, c2) || move9(_grid, r1, c1, r2, c2) ||
-		move8(_grid, r1, c1, r2, c2) || move7(_grid, r1, c1, r2, c2);
+		move8(_grid, r1, c1, r2, c2) || move7(_grid, r1, c1, r2, c2);*/
 	// TODO: finish this
 	if (!flag)
 		gridTryCrush();
@@ -409,7 +416,8 @@ void run(){
 			objectDraw(_candySelectedObject);
 		// do not let player start until grid is stable:
 		if (!startedPlaying && readyForInput){
-			gridTryCrush();
+			if (!gridHasEmpty())
+				gridTryCrush();
 			readyForInput = !gridHasEmpty();
 			startedPlaying = readyForInput;
 		}
