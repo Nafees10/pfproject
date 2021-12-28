@@ -9,6 +9,8 @@ int _grid[ROWS][COLS];
 int _objects[ROWS][COLS];
 /// score
 int _score;
+/// target score
+int _scoreTarget;
 
 /// texture IDs for candies
 int _candyTexture[21];
@@ -47,6 +49,7 @@ void init(int offX, int offY, int cellLength, int border){
 	_playBtnTexture = -1;
 	_loadBtnTexture = -1;
 	_ingameBkgTexture = -1;
+	_scoreTarget = MIN_TARGET + (rand() % (MAX_TARGET - MIN_TARGET));
 	for (int x = 0; x < COLS; x ++){
 		for (int y = 0; y < ROWS; y ++){
 			_objects[y][x] = objectCreate(-1);
@@ -83,26 +86,19 @@ void gridStep(){
 		}
 	}
 	for (int c = 0; c < COLS; c ++){
-		int shift = 0, r = ROWS - 1;
-		while (r + shift >= 0){
-			if (_grid[r + shift][c] == 0){
-				shift --;
-			}else if (shift > 0){
-				_grid[r][c] = _grid[r + shift][c];
-				std::cout << "moved " << r + shift << " to " << r << "\n";
+		for (int r = ROWS -1; r > 0; r --){
+			if (_grid[r][c] == 0){
+				_grid[r][c] = _grid[r - 1][c];
+				_grid[r - 1][c] = 0;
 			}
-			r --;
 		}
-		for (; r >= 0; r --)
-			_grid[r][c] = 0;
 		if (_grid[0][c] == 0)
 			_grid[0][c] = candyGetRandom();
 	}
 }
 
 void gridUpdateTextures(){
-	// TODO: invalid, fix this
-	/*for (int r = 0; r < ROWS; r ++){
+	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
 			int candy = _grid[r][c];
 			int textureId = -1;
@@ -115,7 +111,7 @@ void gridUpdateTextures(){
 				objectSetTexture(_objects[r][c], textureId);
 			}
 		}
-	}*/
+	}
 }
 
 bool candyCrush(int row, int col, bool incrementScore){
@@ -257,7 +253,7 @@ void drawGrid(){
 }
 
 void run(){
-	init(10, 10, 70, 1);
+	init(50, 10, 70, 1);
 	usfmlInit(1024, 768, (char*)"Candy Crush Game");
 	initObjects();
 	objectMove(_playBtnObject, 352, 510);
@@ -294,17 +290,16 @@ void run(){
 		}
 	}
 	bool readyForInput = false;
-	for (int r = 0; r < ROWS; r ++){
-		for (int c = 0; c < COLS; c ++)
-			_grid[r][c] = candyGetRandom();
-	}
 	// loop for game
+	int frameCount = 0;
 	while (isRunning){
 		frameClear(0xFFFFFF);
 		readyForInput = !gridHasEmpty();
 		gridUpdateTextures();
 		drawGrid();
-		gridStep();
+		if (frameCount == 0)
+			gridStep();
+		frameCount = (frameCount + 1) % 30;
 		framePush();
 		if (!eventGet(event))
 			continue;

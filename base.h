@@ -4,6 +4,9 @@
 #define ROWS 9
 #define COLS 9
 
+#define MIN_TARGET 1000
+#define MAX_TARGET 10000
+
 /// Candy properties (color + wrapped/...)
 enum CandyProperty : int{
 	/// Red
