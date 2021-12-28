@@ -29,6 +29,8 @@ int _borderWidth;
 int _candyTexture[21];
 /// index of candyObject ID in _candyIndex array
 int _candyIndex[21];
+/// empty texture
+int _nullTexture;
 /// selected candy texture
 int _candySelectedTexture;
 /// main bkg texture
@@ -72,6 +74,7 @@ void init(){
 		_candyTexture[i] = -1;
 		_candyIndex[i] = -1;
 	}
+	_nullTexture = -1;
 	_candySelectedTexture = -1;
 	_mainBkgTexture = -1;
 	_playBtnTexture = -1;
@@ -159,19 +162,22 @@ void gridUpdateTextures(){
 	}
 }
 
-bool candyCrush(int row, int col, bool incrementScore){
+bool candyCrush(int row, int col){
 	if (row < 0 || col < 0 || row > ROWS || col > COLS ||
-		!candyCheck(_grid[row][col], CandyProperty::Crushed))
+		candyCheck(_grid[row][col], CandyProperty::Crushed))
 		return false;
-	if (incrementScore)
-		_score += candyGetPoints(_grid[row][col]);
+	_score += candyGetPoints(_grid[row][col]);
 	_grid[row][col] |= CandyProperty::Crushed;
 	return true;
 }
 
 int candyGetRandom(){
-	int candy = 1 << (rand() % 5); // color, 0 to 4
-	candy |= CandyProperty::Plain; // property
+	int candy = 1 << (rand() % 4); // color, 0 to 4
+	//candy |= CandyProperty::Plain; // property
+	int rP = 5 + (rand() % 4);
+	candy |= 1 << rP;
+	if (rP == 7 || rP == 8)
+		candy |= CandyProperty::Striped;
 	// randomise for color bomb
 	if (rand() % 10 == 1)
 		candy = CandyProperty::ColorBomb | CandyProperty::Plain;
@@ -210,11 +216,12 @@ int candyGetType(int candy){
 }
 
 bool candyCheck(int candy, int type){
-	return (candy & type) != 0;
+	return type != 0 && (candy & type) == type;
 }
 
 bool candyCheck(int candy, int type1, int type2){
-	return (candy & type1) != 0 && (candy & type2) != 0;
+	return type1 != 0 && type2 != 0 &&
+		(candy & type1) == type1 && (candy & type2) == type2;
 }
 
 bool swapIsPossible(int r1, int c1, int r2, int c2){
@@ -241,6 +248,9 @@ bool swap(int r1, int c1, int r2, int c2){
 	_grid[r2][c2] = tempCandy;
 	// try all move functions
 	bool flag = false;
+	flag = move12(_grid, r1, c1, r2, c2) || move11(_grid, r1, c1, r2, c2) ||
+		move10(_grid, r1, c1, r2, c2) || move9(_grid, r1, c1, r2, c2) ||
+		move8(_grid, r1, c1, r2, c2) || move7(_grid, r1, c1, r2, c2);
 	// TODO: finish this
 	if (!flag)
 		gridTryCrush();
@@ -248,6 +258,7 @@ bool swap(int r1, int c1, int r2, int c2){
 }
 
 void initObjects(){
+	_nullTexture = objectLoadTexture((char*)"assets/null.png");
 	_candySelectedTexture = objectLoadTexture((char*)"assets/candy-selected.png");
 	_mainBkgTexture = objectLoadTexture((char*)"assets/bkg.png");
 	_playBtnTexture = objectLoadTexture((char*)"assets/playbtn.png");
@@ -332,7 +343,8 @@ void drawScore(){
 void drawGrid(){
 	for (int y = 0; y < ROWS; y ++){
 		for (int x = 0; x < COLS; x ++){
-			objectDraw(_objects[y][x]);
+			if (_grid[y][x] != 0)
+				objectDraw(_objects[y][x]);
 		}
 	}
 }
@@ -437,7 +449,6 @@ void run(){
 				x = _offX + c1 * (_cellLength + _borderWidth);
 				y = _offY + r1 * (_cellLength + _borderWidth);
 				objectMove(_candySelectedObject, x, y);
-				std::cout << x << " " << y << "\n";
 			}else{
 				swap(r1, c1, y, x);
 				r1 = -1;

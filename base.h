@@ -28,10 +28,12 @@ enum CandyProperty : int{
 	Plain		= 1 << 5,
 	/// Wrapped candy
 	Wrapped		= 1 << 6,
+	/// Striped
+	Striped		= 1 << 9,
 	/// Horizontal Striped
-	HStriped	= 1 << 7,
+	HStriped	= (1 << 7) | Striped,
 	/// Vertical Striped
-	VStriped	= 1 << 8,
+	VStriped	= (1 << 8) | Striped,
 	/// Crushed candy
 	Crushed		= 1 << 10,
 	/// All properties (Plan + Wrapped + Striped + Crushed)
@@ -54,7 +56,7 @@ void gridStep();
 /// crushes the candy at a cell
 ///
 /// Returns: true if done, false if invalid row/col or already marked as crushed
-bool candyCrush(int row, int col, bool incrementScore);
+bool candyCrush(int row, int col);
 
 /// Returns: a random candy
 int candyGetRandom();
