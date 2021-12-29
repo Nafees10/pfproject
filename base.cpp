@@ -180,14 +180,14 @@ void candyCrush(int r1, int c1, int r2, int c2){
 
 int candyGetRandom(){
 	int candy = 1 << (rand() % 5); // color, 0 to 4
-	//candy |= CandyProperty::Plain; // property
-	int rP = 6 + (rand() % 4);
+	candy |= CandyProperty::Plain; // property
+	/*int rP = 6 + (rand() % 4);
 	candy |= 1 << rP;
 	if (rP == 8 || rP == 9)
 		candy |= CandyProperty::Striped;
 	// randomise for color bomb
 	if (rand() % 10 == 1)
-		candy = CandyProperty::ColorBomb | CandyProperty::Plain;
+		candy = CandyProperty::ColorBomb | CandyProperty::Plain;*/
 	return candy;
 }
 
@@ -242,9 +242,12 @@ bool swapIsPossible(int r1, int c1, int r2, int c2){
 	return false;
 }
 
-void gridTryCrush(){
-	move6(_grid)/* || move5(_grid) || move4(_grid) || move3(_grid) ||
-		move2(_grid) || move1(_grid)*/;
+bool gridTryCrush(bool force, int r1, int c1, int r2, int c2){
+	static bool flag = true;
+	flag = (flag || force) && (move6(_grid) | move5(_grid) | move4(_grid) |
+		 move3(_grid) | move2(_grid, r1, c1, r2, c2) | move1(_grid));
+	std::cout << flag << "\n";
+	return flag;
 }
 
 bool swap(int r1, int c1, int r2, int c2){
@@ -255,13 +258,11 @@ bool swap(int r1, int c1, int r2, int c2){
 	_grid[r2][c2] = tempCandy;
 	// try all move functions
 	bool flag = false;
-	/*flag = move12(_grid, r1, c1, r2, c2) || move11(_grid, r1, c1, r2, c2) ||
-		move10(_grid, r1, c1, r2, c2) || move9(_grid, r1, c1, r2, c2) ||
-		move8(_grid, r1, c1, r2, c2) || move7(_grid, r1, c1, r2, c2);*/
-	// TODO: finish this
-	if (!flag)
-		gridTryCrush();
-	return true;
+	flag = move12(_grid, r1, c1, r2, c2) | move11(_grid, r1, c1, r2, c2) |
+		move10(_grid, r1, c1, r2, c2) | move9(_grid, r1, c1, r2, c2) |
+		move8(_grid, r1, c1, r2, c2) | move7(_grid, r1, c1, r2, c2);
+	flag = flag | gridTryCrush(true, r1, r2, c1, c2);
+	return flag;
 }
 
 void initObjects(){
@@ -398,16 +399,17 @@ void run(){
 		}
 	}
 	bool readyForInput = false;
-	bool startedPlaying = false;
+	// if any candies were crushed right before
+	bool lastCrushed = true;
 	bool saveAtEnd = true;
 	objectSetTexture(_mainBkgObject, _ingameBkgTexture);
 	bool texSet = false;
-	// loop for game
 	int frameCount = 0;
 	int r1 = -1, c1 = -1;
+	// loop for game
 	while (isRunning){
 		frameClear(0xFFFFFF);
-		readyForInput = !gridHasEmpty();
+		readyForInput = !gridHasEmpty() && !lastCrushed;
 		objectDraw(_mainBkgObject);
 		gridUpdateTextures();
 		drawGrid();
@@ -415,12 +417,15 @@ void run(){
 		if (r1 >= 0 && c1 >= 0)
 			objectDraw(_candySelectedObject);
 		// do not let player start until grid is stable:
-		if (!startedPlaying && readyForInput){
-			if (!gridHasEmpty())
-				gridTryCrush();
-			readyForInput = !gridHasEmpty();
-			startedPlaying = readyForInput;
+		if (lastCrushed && !gridHasEmpty()){
+			int currScore = _score;
+			lastCrushed = gridTryCrush(true) || gridHasEmpty();
+			if (currScore == 0)
+				_score = 0;
 		}
+		if (frameCount == 0)
+			gridStep();
+		frameCount = (frameCount + 1) % 60;
 		if (_movesLeft <= 0 || _score >= _scoreTarget){
 			if (!texSet){
 				if (_score >= _scoreTarget)
@@ -433,16 +438,13 @@ void run(){
 			}
 			objectDraw(_dialogObject);
 		}
-		if (frameCount == 0)
-			gridStep();
-		frameCount = (frameCount + 1) % 60;
 		framePush();
 		if (!eventGet(event))
 			continue;
 		if (event.type == EventType::WindowCloseButtonPress){
 			break;
 		}
-		if (readyForInput && startedPlaying && event.type == EventType::Mouse &&
+		if (readyForInput && event.type == EventType::Mouse &&
 			event.mouse.pressed && event.mouse.button == MouseButton::Left){
 			int x = event.mouse.x, y = event.mouse.y;
 			x -= _offX;
@@ -458,7 +460,7 @@ void run(){
 				y = _offY + r1 * (_cellLength + _borderWidth);
 				objectMove(_candySelectedObject, x, y);
 			}else{
-				swap(r1, c1, y, x);
+				lastCrushed = swap(r1, c1, y, x);
 				r1 = -1;
 				c1 = -1;
 			}

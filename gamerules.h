@@ -64,7 +64,7 @@ bool move3(int grid[ROWS][COLS]);
 /// tries move 2
 ///
 /// Returns: true if it did something
-bool move2(int grid[ROWS][COLS]);
+bool move2(int grid[ROWS][COLS],int r1=-1,int c=-1,int r2=-1,int c2=-1);
 
 /// tries move 1
 ///

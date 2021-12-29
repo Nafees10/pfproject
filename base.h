@@ -23,7 +23,7 @@ enum CandyProperty : int{
 	/// Orange
 	Orange		= 1 << 4, // 16
 	/// Color Bomb
-	ColorBomb	= 1 << 5,
+	ColorBomb	= 1 << 5, // 32
 	/// DO NOT USE THIS. ONLY FOR UNDER THE HOOD WORKING
 	AllColors	= Red | Yellow | Green | Blue | Orange | ColorBomb,
 	/// Plain candy
@@ -90,7 +90,7 @@ bool candyCheck(int candy, int type1, int type2);
 bool swapIsPossible(int r1, int c1, int r2, int c2);
 
 /// Tries to crush all candies that can be crushed
-void gridTryCrush();
+bool gridTryCrush(bool force, int r1=-1, int c1=-1, int r2=-1, int c2=-1);
 
 /// Swaps two cells, and tries to match if there is any
 ///
