@@ -1,6 +1,7 @@
 #include "base.h"
 #include "usfml.h"
 #include "gamerules.h"
+#include "saveload.h"
 #include <stdlib.h>
 #include <iostream>
 #include <string>
@@ -187,7 +188,7 @@ int candyGetRandom(){
 		candy |= CandyProperty::Striped;
 	// randomise for color bomb
 	if (rand() % 10 == 1)
-		candy = CandyProperty::ColorBomb | CandyProperty::Plain;*/
+		candy = CandyProperty::ColorBomb;*/
 	return candy;
 }
 
@@ -227,7 +228,7 @@ bool candyCheck(int candy, int type){
 }
 
 bool candyCheck(int candy, int type1, int type2){
-	return type1 != 0 && type2 != 0 &&
+	return type1 != 0 &&
 		(candy & type1) == type1 && (candy & type2) == type2;
 }
 
@@ -242,12 +243,9 @@ bool swapIsPossible(int r1, int c1, int r2, int c2){
 	return false;
 }
 
-bool gridTryCrush(bool force, int r1, int c1, int r2, int c2){
-	static bool flag = true;
-	flag = (flag || force) && (move6(_grid) | move5(_grid) | move4(_grid) |
-		 move3(_grid) | move2(_grid, r1, c1, r2, c2) | move1(_grid));
-	std::cout << flag << "\n";
-	return flag;
+bool gridTryCrush(int r1, int c1, int r2, int c2){
+	return move6(_grid) | move5(_grid) | move4(_grid) |
+		 move3(_grid) | move2(_grid, r1, c1, r2, c2) | move1(_grid);
 }
 
 bool swap(int r1, int c1, int r2, int c2){
@@ -261,7 +259,7 @@ bool swap(int r1, int c1, int r2, int c2){
 	flag = move12(_grid, r1, c1, r2, c2) | move11(_grid, r1, c1, r2, c2) |
 		move10(_grid, r1, c1, r2, c2) | move9(_grid, r1, c1, r2, c2) |
 		move8(_grid, r1, c1, r2, c2) | move7(_grid, r1, c1, r2, c2);
-	flag = flag | gridTryCrush(true, r1, r2, c1, c2);
+	flag = flag | gridTryCrush(r1, r2, c1, c2);
 	return flag;
 }
 
@@ -322,7 +320,7 @@ void initObjects(){
 	_candyTexture[19] = objectLoadTexture((char*)"assets/orange-vstriped.png");
 	_candyIndex[19] = candyGet(CandyProperty::Orange, CandyProperty::VStriped);
 	_candyTexture[20] = objectLoadTexture((char*)"assets/colorbomb.png");
-	_candyIndex[20] = candyGet(CandyProperty::ColorBomb, CandyProperty::Plain);
+	_candyIndex[20] = CandyProperty::ColorBomb;
 
 	// now for text/fonts
 	fontLoad((char*)"assets/font.ttf");
@@ -369,6 +367,7 @@ void run(){
 	objectMove(_loadBtnObject, 352, 638);
 	Event event;
 	bool isRunning = true;
+	bool levelPrepared = false;
 	// loop for main menu
 	while (isRunning){
 		frameClear(0xFFFFFF);
@@ -393,38 +392,35 @@ void run(){
 			}
 			if (event.mouse.y >= 638 && event.mouse.y <= 638 + 64){
 				std::cout << "loading game\n";
-				// TODO: call load function
+				levelPrepared = true;
+				if (!gameLoad(_grid, _score, _scoreTarget, _movesLeft)){
+					std::cout << "failed to load, starting new\n";
+					gridInit();
+				}
 				break;
 			}
 		}
 	}
-	bool readyForInput = false;
-	// if any candies were crushed right before
-	bool lastCrushed = true;
 	bool saveAtEnd = true;
 	objectSetTexture(_mainBkgObject, _ingameBkgTexture);
 	bool texSet = false;
 	int frameCount = 0;
+	bool stable = false;
 	int r1 = -1, c1 = -1;
 	// loop for game
 	while (isRunning){
 		frameClear(0xFFFFFF);
-		readyForInput = !gridHasEmpty() && !lastCrushed;
 		objectDraw(_mainBkgObject);
-		gridUpdateTextures();
 		drawGrid();
 		drawScore();
 		if (r1 >= 0 && c1 >= 0)
 			objectDraw(_candySelectedObject);
-		// do not let player start until grid is stable:
-		if (lastCrushed && !gridHasEmpty()){
-			int currScore = _score;
-			lastCrushed = gridTryCrush(true) || gridHasEmpty();
-			if (currScore == 0)
-				_score = 0;
-		}
-		if (frameCount == 0)
+		if (!stable && frameCount == 0){
 			gridStep();
+			if (!gridHasEmpty())
+				stable = !gridTryCrush();
+			gridUpdateTextures();
+		}
 		frameCount = (frameCount + 1) % 60;
 		if (_movesLeft <= 0 || _score >= _scoreTarget){
 			if (!texSet){
@@ -434,7 +430,6 @@ void run(){
 					objectSetTexture(_dialogObject, _dialogLoseTexture);
 				texSet = true;
 				saveAtEnd = false;
-				readyForInput = false;
 			}
 			objectDraw(_dialogObject);
 		}
@@ -444,7 +439,7 @@ void run(){
 		if (event.type == EventType::WindowCloseButtonPress){
 			break;
 		}
-		if (readyForInput && event.type == EventType::Mouse &&
+		if (stable && event.type == EventType::Mouse &&
 			event.mouse.pressed && event.mouse.button == MouseButton::Left){
 			int x = event.mouse.x, y = event.mouse.y;
 			x -= _offX;
@@ -460,15 +455,15 @@ void run(){
 				y = _offY + r1 * (_cellLength + _borderWidth);
 				objectMove(_candySelectedObject, x, y);
 			}else{
-				lastCrushed = swap(r1, c1, y, x);
+				swap(r1, c1, y, x);
+				stable = false;
 				r1 = -1;
 				c1 = -1;
 			}
 		}
 	}
-	if (saveAtEnd){
-		// TODO: call save function
-	}
+	if (saveAtEnd)
+		gameSave(_grid, _score, _scoreTarget, _movesLeft);
 	usfmlDestroy();
 	std::cout << "bye bye\n";
 }

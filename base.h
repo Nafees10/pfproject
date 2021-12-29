@@ -4,7 +4,7 @@
 #define ROWS 9
 #define COLS 9
 
-#define MIN_TARGET 1000
+#define MIN_TARGET 5000
 #define MAX_TARGET 10000
 
 #define MIN_MOVES 20
@@ -53,6 +53,8 @@ void gridInit();
 bool gridHasEmpty();
 
 /// candies fall down 1 cell maximum if there is space
+///
+/// Returns: true if there are empty cells after shifting
 void gridStep();
 
 /// Updates textures of candy objects in grid
@@ -95,7 +97,7 @@ bool swapIsPossible(int r1, int c1, int r2, int c2);
 /// Tries to crush all candies that can be crushed
 ///
 /// coordinates of last swap are optional, but for accurate move#2, needed
-bool gridTryCrush(bool force, int r1=-1, int c1=-1, int r2=-1, int c2=-1);
+bool gridTryCrush(int r1=-1, int c1=-1, int r2=-1, int c2=-1);
 
 /// Swaps two cells, and tries to match if there is any
 ///

@@ -29,7 +29,7 @@
 
 /// To create a candy of a color and a type (Plain/Wrapped/Stripped)
 /// use candyGet(color, type);
-/// int candy = candyGet(CandyProperty::ColorBomb, 0);
+/// int candy = candyGet(CandyProperty::Red, CandyProperty::Plain);
 
 /// function prototype for all rules will be:
 /// bool name(int[ROWS][COLS] grid, int r1, int c1, int r2, int c2)
@@ -169,6 +169,7 @@ bool move7(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 }
 
 bool move6(int grid[ROWS][COLS]){
+	std::cout << "trying 6\n";
 	bool ret = false;
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
@@ -213,6 +214,7 @@ bool move6(int grid[ROWS][COLS]){
 }
 
 bool move5(int grid[ROWS][COLS]){
+	std::cout << "trying 5\n";
 	bool ret = false;
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
@@ -261,6 +263,7 @@ bool move5(int grid[ROWS][COLS]){
 }
 
 bool move4(int grid[ROWS][COLS]){
+	std::cout << "trying 4\n";
 	bool ret = false;
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
@@ -275,8 +278,8 @@ bool move4(int grid[ROWS][COLS]){
 			if (count >= 5){
 				ret = true;
 				candyCrush(r, c, r + count - 1, c);
-				grid[r + 2][c] = candyGet(CandyProperty::ColorBomb,
-										  CandyProperty::Plain);
+				grid[r + 2][c] = CandyProperty::ColorBomb;
+				std::cout << "did move 4\n";
 			}
 			for (i = c, count = 0; i < COLS && count < 5; i ++){
 				if (!candyCheck(grid[r][i], color))
@@ -286,8 +289,8 @@ bool move4(int grid[ROWS][COLS]){
 			if (count >= 5){
 				ret = true;
 				candyCrush(r, c, r, c + count - 1);
-				grid[r][c + 2] = candyGet(CandyProperty::ColorBomb,
-										  CandyProperty::Plain);
+				grid[r][c + 2] = CandyProperty::ColorBomb;
+				std::cout << "did move 4\n";
 			}
 		}
 	}
@@ -295,6 +298,7 @@ bool move4(int grid[ROWS][COLS]){
 }
 
 bool move3(int grid[ROWS][COLS]){
+	std::cout << "trying 3\n";
 	bool ret = false;
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
@@ -325,8 +329,6 @@ bool move3(int grid[ROWS][COLS]){
 										  CandyProperty::Plain);
 				}
 			}
-			std::cout << "move 3: V/H: " << consecutiveV << '/' << consecutiveH
-				<< "\n";
 			if (consecutiveV && consecutiveH){
 				ret = true;
 				for (int y = r; y < r + 3; y ++)
@@ -342,6 +344,7 @@ bool move3(int grid[ROWS][COLS]){
 }
 
 bool move2(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
+	std::cout << "trying 2\n";
 	bool ret = false;
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
@@ -369,10 +372,8 @@ bool move2(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 				std::cout << "doing 2\n";
 				candyCrush(r, c, r, c + count - 1);
 				if (r1 == r && c2 >= c && c2 < c + 4){
-					std::cout << "c2\n";
 					grid[r][c2] = candyGet(color, CandyProperty::HStriped);
 				}else if (r2 == r && c1 >= c && c1 < c + 4){
-					std::cout << "c1\n";
 					grid[r][c1] = candyGet(color, CandyProperty::HStriped);
 				}else
 					grid[r][c + 2] = candyGet(color, CandyProperty::HStriped);
@@ -383,6 +384,7 @@ bool move2(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 }
 
 bool move1(int grid[ROWS][COLS]){
+	std::cout << "trying 1\n";
 	bool ret = false;
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
@@ -390,22 +392,24 @@ bool move1(int grid[ROWS][COLS]){
 			int i;
 			int count;
 			for (i = r, count = 0; i < ROWS && count < 3; i ++){
-				if (!candyCheck(grid[i][c], color))
+				if (!candyCheck(grid[i][c], color, CandyProperty::Plain))
 					break;
 				count ++;
 			}
 			if (count >= 3){
 				ret = true;
 				candyCrush(r, c, r + count - 1, c);
+				std::cout << "did move 1\n";
 			}
 			for (i = c, count = 0; i < COLS && count < 3; i ++){
-				if (!candyCheck(grid[r][i], color))
+				if (!candyCheck(grid[r][i], color, CandyProperty::Plain))
 					break;
 				count ++;
 			}
 			if (count >= 3){
 				ret = true;
 				candyCrush(r, c, r, c + count - 1);
+				std::cout << "did move 1\n";
 			}
 		}
 	}
