@@ -420,6 +420,9 @@ void run(){
 			if (!gridHasEmpty())
 				stable = !gridTryCrush();
 			gridUpdateTextures();
+			if (!levelPrepared)
+				_score = 0;
+			levelPrepared = levelPrepared || stable;
 		}
 		frameCount = (frameCount + 1) % 60;
 		if (_movesLeft <= 0 || _score >= _scoreTarget){
@@ -431,7 +434,8 @@ void run(){
 				texSet = true;
 				saveAtEnd = false;
 			}
-			objectDraw(_dialogObject);
+			objectDraw(_blurBkgObject);
+			//objectDraw(_dialogObject);
 		}
 		framePush();
 		if (!eventGet(event))
