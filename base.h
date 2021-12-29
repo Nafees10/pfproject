@@ -43,7 +43,7 @@ enum CandyProperty : int{
 	AllProps	= Plain | Wrapped | HStriped | VStriped | Crushed,
 };
 
-/// initializes level
+/// initializes level, call this to initialize this module
 void init();
 
 /// initializes grid to empty
@@ -55,15 +55,18 @@ bool gridHasEmpty();
 /// candies fall down 1 cell maximum if there is space
 void gridStep();
 
+/// Updates textures of candy objects in grid
+void gridUpdateTextures();
+
 /// crushes the candy at a cell
 ///
 /// Returns: true if done, false if invalid row/col or already marked as crushed
 bool candyCrush(int row, int col);
 
-/// Crushes the candies in rectangle r1,c1 r2,c2
+/// Crushes the candies in rectangle r1,c1 r2,c2 (inclusive)
 void candyCrush(int r1, int c1, int r2, int c2);
 
-/// Returns: a random candy
+/// Returns: a random plain candy
 int candyGetRandom();
 
 /// Returns: candy whose color is `color` and has a CandyProperty
@@ -90,12 +93,23 @@ bool candyCheck(int candy, int type1, int type2);
 bool swapIsPossible(int r1, int c1, int r2, int c2);
 
 /// Tries to crush all candies that can be crushed
+///
+/// coordinates of last swap are optional, but for accurate move#2, needed
 bool gridTryCrush(bool force, int r1=-1, int c1=-1, int r2=-1, int c2=-1);
 
 /// Swaps two cells, and tries to match if there is any
 ///
 /// Returns: true if swap happened, false if not possible
 bool swap(int r1, int c1, int r2, int c2);
+
+/// loads textures, and prepares objects
+void initObjects();
+
+/// Draws the score, target, and moves
+void drawScore();
+
+/// Draws candies (the grid)
+void drawGrid();
 
 void run();
 
