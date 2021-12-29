@@ -41,11 +41,8 @@ bool move12(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 		!candyCheck(grid[r2][c2], CandyProperty::Wrapped))
 		return false;
 	std::cout << "doing 12\n";
-	for (int r = r2 - 2; r <= r2 + 2; r ++){
-		for (int c = c2 - 2; c <= c2 + 2; c ++){
-			candyCrush(r, c);
-		}
-	}
+	candyCrush(r1 - 2, c1 - 2, r1 + 2, c1 + 2);
+	candyCrush(r2 - 2, c2 - 2, r2 + 2, c2 + 2);
 	return true;
 }
 
@@ -63,6 +60,8 @@ bool move11(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 	if (centerR == -1 && centerC == -1)
 		return false;
 	std::cout << "doing 11\n";
+	candyCrush(r1, c1);
+	candyCrush(r2, c2);
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = centerC - 1; c <= centerC + 1; c ++){
 			candyCrush(r, c);
@@ -90,6 +89,8 @@ bool move10(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 	if (centerR == -1 && centerC == -1)
 		return false;
 	std::cout << "doing 10\n";
+	candyCrush(r1, c1);
+	candyCrush(r2, c2);
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS;  c++){
 			if (r >= centerR - 1 && r <= centerR + 1 &&
@@ -116,6 +117,8 @@ bool move9(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 	if (centerR == -1 && centerC == -1)
 		return false;
 	std::cout << "doing 9\n";
+	candyCrush(r1, c1);
+	candyCrush(r2, c2);
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
 			if (candyCheck(grid[r][c], candyGetColor(grid[centerR][centerC]))){
@@ -154,6 +157,8 @@ bool move7(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 	if (color == -1)
 		return false;
 	std::cout << "doing 7\n";
+	candyCrush(r1, c1);
+	candyCrush(r2, c2);
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
 			if (candyCheck(grid[r][c], color))
