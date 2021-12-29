@@ -223,8 +223,10 @@ bool move5(int grid[ROWS][COLS]){
 			int i;
 			int count;
 			for (i = r, count = 0; i < ROWS; i ++){
-				if (!candyCheck(grid[i][c], color))
+				if (!candyCheck(grid[i][c], color)){
+					i ++;
 					break;
+				}
 				stripedFound = stripedFound ||
 					candyCheck(grid[i][c], CandyProperty::Striped);
 				count ++;
@@ -232,7 +234,7 @@ bool move5(int grid[ROWS][COLS]){
 			if (count >= 3 && stripedFound){
 				ret = true;
 				std::cout << "doing 5 with color " << color << "\n";
-				for (; i >= r; i --){
+				for (i --; i >= r; i --){
 					if (candyCheck(grid[i][c], color, CandyProperty::HStriped))
 						candyCrush(i, 0, i, COLS);
 					if (candyCheck(grid[i][c], color, CandyProperty::VStriped))
@@ -241,8 +243,10 @@ bool move5(int grid[ROWS][COLS]){
 			}
 			stripedFound = false;
 			for (i = c, count = 0; i < COLS; i ++){
-				if (!candyCheck(grid[r][i], color))
+				if (!candyCheck(grid[r][i], color)){
+					i ++;
 					break;
+				}
 				stripedFound = stripedFound ||
 					candyCheck(grid[r][i], color, CandyProperty::Striped);
 				count ++;
@@ -250,7 +254,7 @@ bool move5(int grid[ROWS][COLS]){
 			if (count >= 3 && stripedFound){
 				ret = true;
 				std::cout << "doing 5 with color " << color << "\n";
-				for (; i >= c; i --){
+				for (i --; i >= c; i --){
 					if (candyCheck(grid[r][i], color, CandyProperty::HStriped))
 						candyCrush(i, 0, i, COLS);
 					if (candyCheck(grid[r][i], color, CandyProperty::VStriped))
