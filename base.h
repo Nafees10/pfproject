@@ -40,7 +40,7 @@ enum CandyProperty : int{
 	Crushed		= 1 << 11,
 	/// All properties (Plan + Wrapped + Striped + Crushed)
 	/// ONLY FOR UNDER THE HOOD WORKING, DO NOT USE CandyProperty::AllProps
-	AllProps	= Plain | Wrapped | HStriped | VStriped | Crushed,
+	AllProps	= ColorBomb | Plain | Wrapped | HStriped | VStriped | Crushed,
 };
 
 /// initializes level, call this to initialize this module

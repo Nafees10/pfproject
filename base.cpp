@@ -228,7 +228,7 @@ bool candyCheck(int candy, int type){
 }
 
 bool candyCheck(int candy, int type1, int type2){
-	return type1 != 0 &&
+	return type1 != 0 && type2 != 0 &&
 		(candy & type1) == type1 && (candy & type2) == type2;
 }
 
