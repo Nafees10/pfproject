@@ -272,6 +272,8 @@ bool move4(int grid[ROWS][COLS]){
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
 			int color = candyGetColor(grid[r][c]);
+			if (color == CandyProperty::ColorBomb)
+				continue;
 			int i;
 			int count;
 			for (i = r, count = 0; i < ROWS && count < 5; i ++){
