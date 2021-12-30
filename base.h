@@ -4,8 +4,8 @@
 #define ROWS 9
 #define COLS 9
 
-#define MIN_TARGET 100000
-#define MAX_TARGET 1000000
+#define MIN_TARGET 7000
+#define MAX_TARGET 10000
 
 #define MIN_MOVES 20
 #define MAX_MOVES 21
@@ -40,7 +40,8 @@ enum CandyProperty : int{
 	Crushed		= 1 << 11,
 	/// All properties (Plan + Wrapped + Striped + Crushed)
 	/// ONLY FOR UNDER THE HOOD WORKING, DO NOT USE CandyProperty::AllProps
-	AllProps	= ColorBomb | Plain | Wrapped | HStriped | VStriped | Crushed,
+	AllProps	= ColorBomb | Plain | Wrapped | HStriped | VStriped | Striped |
+					Crushed,
 };
 
 /// initializes level, call this to initialize this module

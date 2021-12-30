@@ -2,6 +2,7 @@
 #include "usfml.h"
 #include "gamerules.h"
 #include "saveload.h"
+#include "debug.h"
 #include <stdlib.h>
 #include <iostream>
 #include <string>
@@ -99,13 +100,6 @@ void init(){
 
 	_scoreTarget = MIN_TARGET + (rand() % (MAX_TARGET - MIN_TARGET));
 	_movesLeft = MIN_MOVES + (rand() % (MAX_MOVES - MIN_MOVES));
-	for (int x = 0; x < COLS; x ++){
-		for (int y = 0; y < ROWS; y ++){
-			_objects[y][x] = objectCreate(-1);
-			objectMove(_objects[y][x], _offX + x *(_borderWidth + _cellLength),
-					   _offY + y * (_borderWidth + _cellLength));
-		}
-	}
 	_score = 0;
 }
 
@@ -153,13 +147,11 @@ void gridUpdateTextures(){
 			int candy = _grid[r][c];
 			int textureId = -1;
 			for (int i = 0; i < 21 && textureId == -1; i ++){
-				if (candyCheck(_candyIndex[i], candyGetColor(candy),
-							   candyGetType(candy)))
+				if (candyCheck(_candyIndex[i], candy))
 					textureId = _candyTexture[i];
 			}
-			if (textureId > -1){
+			if (textureId > -1)
 				objectSetTexture(_objects[r][c], textureId);
-			}
 		}
 	}
 }
@@ -181,16 +173,7 @@ void candyCrush(int r1, int c1, int r2, int c2){
 }
 
 int candyGetRandom(){
-	int candy = 1 << (rand() % 5); // color, 0 to 4
-	candy |= CandyProperty::Plain; // property
-	/*int rP = 6 + (rand() % 4);
-	candy |= 1 << rP;
-	if (rP == 8 || rP == 9)
-		candy |= CandyProperty::Striped;
-	// randomise for color bomb
-	if (rand() % 10 == 1)
-		candy = CandyProperty::ColorBomb;*/
-	return candy;
+	return (1 << (rand() % 5)) | CandyProperty::Plain;
 }
 
 int candyGet(int color, int property){
@@ -323,6 +306,14 @@ void initObjects(){
 	_candyIndex[19] = candyGet(CandyProperty::Orange, CandyProperty::VStriped);
 	_candyTexture[20] = objectLoadTexture((char*)"assets/colorbomb.png");
 	_candyIndex[20] = CandyProperty::ColorBomb;
+	// create objects for grid
+	for (int x = 0; x < COLS; x ++){
+		for (int y = 0; y < ROWS; y ++){
+			_objects[y][x] = objectCreate(-1);
+			objectMove(_objects[y][x], _offX + x *(_borderWidth + _cellLength),
+					   _offY + y * (_borderWidth + _cellLength));
+		}
+	}
 
 	// now for text/fonts
 	fontLoad((char*)"assets/font.ttf");
@@ -425,6 +416,8 @@ void run(){
 			if (!gridHasEmpty())
 				stable = !gridTryCrush();
 			gridUpdateTextures();
+			DEBUG_printGrid(_grid);
+			std::cout << "\n";
 			if (!levelPrepared)
 				_score = 0;
 			levelPrepared = levelPrepared || stable;
