@@ -5,10 +5,7 @@
 #include "base.h"
 
 int main(){
-	srand(time(NULL));
+	srand(time(NULL)); // set RNG seed to current time
 	run();
-	/*int candy = candyGet(CandyProperty::Red, CandyProperty::HStriped);
-	std::cout << candyCheck(candy, CandyProperty::Striped);
-	std::cin.ignore(100, '\n');*/
 	return 0;
 }
