@@ -36,6 +36,17 @@ bool usfmlInit(int width, int height, char *title){
 bool usfmlDestroy(){
 	if (!_initialised)
 		return false;
+	for (int i = 0; i < MAX_OBJECTS; i ++){
+		if (_texture[i] != nullptr)
+			delete _texture[i];
+		if (_sprite[i] != nullptr)
+			delete _sprite[i];
+		if (_text[i] != nullptr)
+			delete _text[i];
+		_texture[i] = nullptr;
+		_sprite[i] = nullptr;
+		_text[i] = nullptr;
+	}
 	delete _window;
 	delete _sfEvent;
 	delete _clock;
