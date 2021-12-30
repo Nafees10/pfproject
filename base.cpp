@@ -71,6 +71,7 @@ int _movesText;
 
 void init(){
 	gridInit();
+	// set all textures to -1
 	for (int i = 0; i < 21; i ++){
 		_candyTexture[i] = -1;
 		_candyIndex[i] = -1;
@@ -244,6 +245,7 @@ bool swapIsPossible(int r1, int c1, int r2, int c2){
 }
 
 bool gridTryCrush(int r1, int c1, int r2, int c2){
+	// DO NOT CHANGE THE ORDER OF THESE FUNCTIONS
 	return move6(_grid) | move5(_grid) | move4(_grid) |
 		 move3(_grid) | move2(_grid, r1, c1, r2, c2) | move1(_grid);
 }
@@ -254,7 +256,7 @@ bool swap(int r1, int c1, int r2, int c2){
 	int tempCandy = _grid[r1][c1];
 	_grid[r1][c1] = _grid[r2][c2];
 	_grid[r2][c2] = tempCandy;
-	// try all move functions
+	// try all move functions.
 	bool flag = false;
 	flag = move12(_grid, r1, c1, r2, c2) | move11(_grid, r1, c1, r2, c2) |
 		move10(_grid, r1, c1, r2, c2) | move9(_grid, r1, c1, r2, c2) |
@@ -413,8 +415,11 @@ void run(){
 		objectDraw(_mainBkgObject);
 		drawGrid();
 		drawScore();
+		// if a candy is selcted, draw a transparent square around it
 		if (r1 >= 0 && c1 >= 0)
 			objectDraw(_candySelectedObject);
+		// only run these cpu intensive functions if grid is unstable, and only
+		// once every second (60fps)
 		if (!stable && frameCount == 0){
 			gridStep();
 			if (!gridHasEmpty())
@@ -426,6 +431,7 @@ void run(){
 		}
 		frameCount = (frameCount + 1) % 60;
 		if (_movesLeft <= 0 || _score >= _scoreTarget){
+			// set texture of dialog box to win or loose dialog
 			if (!texSet){
 				if (_score >= _scoreTarget)
 					objectSetTexture(_dialogObject, _dialogWinTexture);
@@ -435,12 +441,17 @@ void run(){
 				saveAtEnd = false;
 			}
 			objectDraw(_blurBkgObject);
-			//objectDraw(_dialogObject);
+			objectDraw(_dialogObject);
+			// trick it into not taking user input
+			stable = false;
 		}
 		framePush();
+		// skip rest of loop body if no user input
 		if (!eventGet(event))
 			continue;
 		if (event.type == EventType::WindowCloseButtonPress){
+			// do not save if level not prepared yet
+			saveAtEnd = saveAtEnd && levelPrepared;
 			break;
 		}
 		if (stable && event.type == EventType::Mouse &&
@@ -459,7 +470,7 @@ void run(){
 				y = _offY + r1 * (_cellLength + _borderWidth);
 				objectMove(_candySelectedObject, x, y);
 			}else{
-				swap(r1, c1, y, x);
+				_movesLeft -= 1*swap(r1, c1, y, x);
 				stable = false;
 				r1 = -1;
 				c1 = -1;
