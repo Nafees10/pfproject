@@ -463,7 +463,10 @@ void run(){
 				y = _offY + r1 * (_cellLength + _borderWidth);
 				objectMove(_candySelectedObject, x, y);
 			}else{
-				_movesLeft -= 1*swap(r1, c1, y, x);
+				if (!swap(r1, c1, y, x))
+					swap(r1,c1,y,x);
+				else
+					_movesLeft -= 1;
 				stable = false;
 				r1 = -1;
 				c1 = -1;
