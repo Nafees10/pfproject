@@ -397,9 +397,10 @@ void run(){
 	bool saveAtEnd = true;
 	objectSetTexture(_mainBkgObject, _ingameBkgTexture);
 	bool texSet = false;
+	bool lastSwapped = false;
 	int frameCount = 0;
 	bool stable = false;
-	int r1 = -1, c1 = -1;
+	int r1 = -1, c1 = -1, r2 = -1, c2 = -1;
 	// loop for game
 	while (isRunning){
 		frameClear(0xFFFFFF);
@@ -464,7 +465,7 @@ void run(){
 				objectMove(_candySelectedObject, x, y);
 			}else{
 				if (!swap(r1, c1, y, x))
-					swap(r1,c1,y,x);
+					swap(r1, c1, y, x);
 				else
 					_movesLeft -= 1;
 				stable = false;
