@@ -256,9 +256,9 @@ bool move5(int grid[ROWS][COLS]){
 				std::cout << "doing 5 with color " << color << "\n";
 				for (i --; i >= c; i --){
 					if (candyCheck(grid[r][i], color, CandyProperty::HStriped))
-						candyCrush(i, 0, i, COLS);
+						candyCrush(r, 0, r, COLS);
 					if (candyCheck(grid[r][i], color, CandyProperty::VStriped))
-						candyCrush(0, c, ROWS, c);
+						candyCrush(0, i, ROWS, i);
 				}
 			}
 		}
