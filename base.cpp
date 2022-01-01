@@ -145,18 +145,23 @@ void gridUpdateTextures(){
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
 			int candy = _grid[r][c];
-			for (int i = 0; i < 21; i ++){
-				if (candyCheck(_candyIndex[i], candy)){
-					objectSetTexture(_objects[r][c], _candyTexture[i]);
-					break;
-				}
+			int tex = -1;
+			for (int i = 0; i < 21 && tex == -1; i ++){
+				if (candyCheck(_candyIndex[i], candy))
+					tex = i;
+			}
+			if (!objectSetTexture(_objects[r][c], _candyTexture[tex]) && tex != -1){
+				std::cout << "Failed to set texture for ";
+				DEBUG_printCandy(candy);
+				std::cout << "\n";
+				std::cout << "\tobject: " << _objects[r][c] << " tex: " << tex << "\n";
 			}
 		}
 	}
 }
 
 bool candyCrush(int row, int col){
-	if (row < 0 || col < 0 || row > ROWS || col > COLS ||
+	if (row < 0 || col < 0 || row >= ROWS || col >= COLS ||
 		candyCheck(_grid[row][col], CandyProperty::Crushed))
 		return false;
 	_score += candyGetPoints(_grid[row][col]);
@@ -309,6 +314,7 @@ void initObjects(){
 	for (int x = 0; x < COLS; x ++){
 		for (int y = 0; y < ROWS; y ++){
 			_objects[y][x] = objectCreate(-1);
+			std::cout << "\t" << _objects[y][x] << "\n";
 			objectMove(_objects[y][x], _offX + x *(_borderWidth + _cellLength),
 					   _offY + y * (_borderWidth + _cellLength));
 		}
@@ -415,9 +421,11 @@ void run(){
 			gridStep();
 			if (!gridHasEmpty())
 				stable = !gridTryCrush();
+			if (stable){
+				DEBUG_printGrid(_grid);
+				std::cout << "\n";
+			}
 			gridUpdateTextures();
-			DEBUG_printGrid(_grid);
-			std::cout << "\n";
 			if (!levelPrepared)
 				_score = 0;
 			levelPrepared = levelPrepared || stable;
