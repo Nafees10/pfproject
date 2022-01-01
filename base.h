@@ -6,9 +6,7 @@
 
 #define MIN_TARGET 7000
 #define MAX_TARGET 10000
-
-#define MIN_MOVES 20
-#define MAX_MOVES 21
+#define MOVES 20
 
 /// Candy properties (color + wrapped/...)
 enum CandyProperty : int{

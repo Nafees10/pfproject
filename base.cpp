@@ -99,7 +99,7 @@ void init(){
 	_movesText = -1;
 
 	_scoreTarget = MIN_TARGET + (rand() % (MAX_TARGET - MIN_TARGET));
-	_movesLeft = MIN_MOVES + (rand() % (MAX_MOVES - MIN_MOVES));
+	_movesLeft = MOVES;
 	_score = 0;
 }
 
