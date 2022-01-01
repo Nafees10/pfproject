@@ -145,13 +145,12 @@ void gridUpdateTextures(){
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS; c ++){
 			int candy = _grid[r][c];
-			int textureId = -1;
-			for (int i = 0; i < 21 && textureId == -1; i ++){
-				if (candyCheck(_candyIndex[i], candy))
-					textureId = _candyTexture[i];
+			for (int i = 0; i < 21; i ++){
+				if (candyCheck(_candyIndex[i], candy)){
+					objectSetTexture(_objects[r][c], _candyTexture[i]);
+					break;
+				}
 			}
-			if (textureId > -1)
-				objectSetTexture(_objects[r][c], textureId);
 		}
 	}
 }
@@ -395,12 +394,12 @@ void run(){
 		}
 	}
 	bool saveAtEnd = true;
+	bool gameOver = false;
 	objectSetTexture(_mainBkgObject, _ingameBkgTexture);
 	bool texSet = false;
-	bool lastSwapped = false;
 	int frameCount = 0;
 	bool stable = false;
-	int r1 = -1, c1 = -1, r2 = -1, c2 = -1;
+	int r1 = -1, c1 = -1;
 	// loop for game
 	while (isRunning){
 		frameClear(0xFFFFFF);
@@ -424,7 +423,7 @@ void run(){
 			levelPrepared = levelPrepared || stable;
 		}
 		frameCount = (frameCount + 1) % 60;
-		if (_movesLeft <= 0 || _score >= _scoreTarget){
+		if (stable && (_movesLeft <= 0 || _score >= _scoreTarget)){
 			// set texture of dialog box to win or loose dialog
 			if (!texSet){
 				if (_score >= _scoreTarget)
@@ -436,8 +435,7 @@ void run(){
 			}
 			objectDraw(_blurBkgObject);
 			objectDraw(_dialogObject);
-			// trick it into not taking user input
-			stable = false;
+			gameOver = true;
 		}
 		framePush();
 		// skip rest of loop body if no user input
@@ -448,7 +446,7 @@ void run(){
 			saveAtEnd = saveAtEnd && levelPrepared;
 			break;
 		}
-		if (stable && event.type == EventType::Mouse &&
+		if (stable && !gameOver && event.type == EventType::Mouse &&
 			event.mouse.pressed && event.mouse.button == MouseButton::Left){
 			int x = event.mouse.x, y = event.mouse.y;
 			x -= _offX;
