@@ -148,9 +148,9 @@ void gridUpdateTextures(){
 			int tex = -1;
 			for (int i = 0; i < 21 && tex == -1; i ++){
 				if (candyCheck(_candyIndex[i], candy))
-					tex = i;
+					tex = _candyTexture[i];
 			}
-			if (!objectSetTexture(_objects[r][c], _candyTexture[tex]) && tex != -1){
+			if (!objectSetTexture(_objects[r][c], tex) && tex != -1){
 				std::cout << "Failed to set texture for ";
 				DEBUG_printCandy(candy);
 				std::cout << "\n";
@@ -366,6 +366,7 @@ void run(){
 	Event event;
 	bool isRunning = true;
 	bool levelPrepared = false;
+	bool saveAtEnd = true;
 	// loop for main menu
 	while (isRunning){
 		frameClear(0xFFFFFF);
@@ -377,6 +378,7 @@ void run(){
 			continue;
 		if (event.type == EventType::WindowCloseButtonPress){
 			isRunning = false;
+			saveAtEnd = false;
 			break;
 		}
 		if (event.type == EventType::Mouse &&
@@ -399,7 +401,6 @@ void run(){
 			}
 		}
 	}
-	bool saveAtEnd = true;
 	bool gameOver = false;
 	objectSetTexture(_mainBkgObject, _ingameBkgTexture);
 	bool texSet = false;
