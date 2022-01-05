@@ -441,10 +441,10 @@ void run(){
 					objectSetTexture(_dialogObject, _dialogLoseTexture);
 				texSet = true;
 				saveAtEnd = false;
+			gameOver = true;
 			}
 			objectDraw(_blurBkgObject);
 			objectDraw(_dialogObject);
-			gameOver = true;
 		}
 		framePush();
 		// skip rest of loop body if no user input
