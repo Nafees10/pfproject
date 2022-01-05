@@ -441,7 +441,7 @@ void run(){
 					objectSetTexture(_dialogObject, _dialogLoseTexture);
 				texSet = true;
 				saveAtEnd = false;
-			gameOver = true;
+				gameOver = true;
 			}
 			objectDraw(_blurBkgObject);
 			objectDraw(_dialogObject);
