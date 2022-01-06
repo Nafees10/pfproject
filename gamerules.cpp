@@ -89,17 +89,18 @@ bool move10(int grid[ROWS][COLS], int r1, int c1, int r2, int c2){
 	if (centerR == -1 && centerC == -1)
 		return false;
 	std::cout << "doing 10\n";
-	candyCrush(r1, c1);
-	candyCrush(r2, c2);
+	int centerCandy = grid[centerR][centerC];
 	for (int r = 0; r < ROWS; r ++){
 		for (int c = 0; c < COLS;  c++){
 			if (r >= centerR - 1 && r <= centerR + 1 &&
 				c >= centerC - 1 && c <= centerC + 1)
 				candyCrush(r, c);
 			else
-				grid[r][c] = grid[centerR][centerC];
+				grid[r][c] = centerCandy;
 		}
 	}
+	candyCrush(r1, c1);
+	candyCrush(r2, c2);
 	return true;
 }
 
