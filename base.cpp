@@ -394,6 +394,7 @@ void run(){
 				std::cout << "loading game\n";
 				levelPrepared = true;
 				if (!gameLoad(_grid, _score, _scoreTarget, _movesLeft)){
+					levelPrepared = false;
 					std::cout << "failed to load, starting new\n";
 					gridInit();
 				}
