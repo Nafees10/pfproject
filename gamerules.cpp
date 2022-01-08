@@ -327,7 +327,7 @@ bool move3(int grid[ROWS][COLS]){
 				consecutiveH = true;
 				if (c - 2 >= 0){
 					c1 = c - 2;
-					for (int j = c - 2; j < ROWS && j <= c && consecutiveH; j ++)
+					for (int j = c - 2; j < COLS && j <= c && consecutiveH; j ++)
 						consecutiveH = candyCheck(grid[i][j], color,
 										  CandyProperty::Plain) &&
 									!candyCheck(grid[i][j], CandyProperty::Crushed);
